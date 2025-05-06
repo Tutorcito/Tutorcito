@@ -9,19 +9,23 @@ interface resourcesCardProps {
   description3: string;
 }
 
-function resourcesCard({ icon, description1, description2, description3 }: resourcesCardProps) {
+function ResourcesCard({ icon, description1, description2, description3 }: resourcesCardProps) {
   return (
     <Card>
       <CardHeader>
-        <Image src={icon} alt="Icon Resource"/>
+        <Image src={icon} width={280} height={56} alt="Icon Resource"/>
       </CardHeader>
       <CardContent>
-        <p>{description1}</p> //seria la parte del figma que esta en puntos.
-        <p>{description2}</p>
-        <p>{description3}</p>
+      {/* //seria la parte del figma que esta en puntos. */}
+        <ul>
+          <li>{description1}</li> 
+          <li>{description2}</li>
+          <li>{description3}</li>
+        </ul>
+
       </CardContent>
     </Card>
   );
 }
 
-export default resourcesCard;
+export default ResourcesCard;
