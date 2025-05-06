@@ -18,8 +18,11 @@ function classCard({ subject, students, tutors, classImage }: classCardProps) {
         <CardDescription>Card Description</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>{students}</p>
-        <p>{tutors}</p>
+        <div className="flex items-center justify-center gap-2">
+          <p>{students}</p>
+          <p>{tutors}</p>
+        </div>
+        
       </CardContent>
     </Card>
   );
