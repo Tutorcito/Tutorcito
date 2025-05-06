@@ -9,11 +9,11 @@ interface classCardProps {
   classImage: string; //imagen de la asignatura
 }
 
-function classCard({ subject, students, tutors, classImage }: classCardProps) {
+function ClassCard({ subject, students, tutors, classImage }: classCardProps) {
   return (
     <Card>
       <CardHeader>
-        <Image src={classImage} alt="Class Image"/>
+        <Image src={classImage} width={280} height={56} alt="Class Image"/>
         <CardTitle>{subject}</CardTitle>
         <CardDescription>Card Description</CardDescription>
       </CardHeader>
@@ -27,4 +27,4 @@ function classCard({ subject, students, tutors, classImage }: classCardProps) {
   );
 }
 
-export default classCard;
+export default ClassCard;
