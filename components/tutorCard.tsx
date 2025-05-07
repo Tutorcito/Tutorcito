@@ -22,7 +22,7 @@ const tutorCard = ({ name, profileImage, subjects }: tutorCardProps) => {
       </CardHeader>
       <CardContent>
         <p>{subjects}</p>
-        //Reseñas
+        //Reseñas 
       </CardContent>
     </Card>
   );
