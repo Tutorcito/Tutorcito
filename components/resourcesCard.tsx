@@ -27,7 +27,7 @@ function ResourcesCard({ icon, description1, description2, description3 }: resou
       </CardHeader>
       <CardContent>
       {/* //seria la parte del figma que esta en puntos. */}
-      <ul className="mb-4 space-y-2">
+      <ul className="mb-12 space-y-2">
         <li className="flex items-center">
           <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
           <span className="text-gray-700">{description1}</span>

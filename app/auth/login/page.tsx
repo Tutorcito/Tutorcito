@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { auth } from "@/app/lib/supabase";
+import { auth } from "@/lib/supabase";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
@@ -179,18 +179,18 @@ export default function Login() {
 				</div>
 			</div>
 
-            {/*  Lado derecho - imagen */}
-            <div className="hidden md:block md:w-1/2 bg-gray-100">
-                <div className="h-full w-full relative">
-                    <Image
-                        src={"/onboarding-pic.png"}
-                        alt="Students having a tutoring session together."
-                        height={2200}
-                        width={1440}
-                        className="absolute inset-0 bg-cover bg-center h-full w-full"
-                    />
-                </div>
-            </div>
+			{/*  Lado derecho - imagen */}
+			<div className="hidden md:block md:w-1/2 bg-gray-100">
+				<div className="h-full w-full relative">
+					<Image
+						src={"/onboarding.jpg"}
+						alt="Students having a tutoring session together."
+						height={1400}
+						width={1400}
+						className="absolute inset-0 bg-cover bg-center h-full w-full"
+					/>
+				</div>
+			</div>
 		</div>
 	);
 }
