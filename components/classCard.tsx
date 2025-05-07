@@ -22,7 +22,6 @@ function ClassCard({ subject, students, tutors, classImage }: classCardProps) {
           <p>{students}</p>
           <p>{tutors}</p>
         </div>
-        
       </CardContent>
     </Card>
   );
