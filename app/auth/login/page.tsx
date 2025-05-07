@@ -69,7 +69,7 @@ export default function Login() {
 			<div className="w-full md:w-1/2 p-8 flex flex-col justify-center items-center">
 				<div className="max-w-md w-full">
 					{/* Logo y titulo */}
-					<div className="flex items-center mb-2">
+					<div className="flex items-center mb-2 pl-32">
 						<Image
 							src={"/tutorcito-logo.png"}
 							alt="Logo de Tutorcito"
@@ -80,13 +80,13 @@ export default function Login() {
 					</div>
 					{/* Formulario de login */}
 					<div className="mb-12">
-						<h2 className="text-4xl font-bold text-gray-700 mb-1">
+						<h2 className="text-4xl text-center font-bold text-gray-700 mb-1">
 							Aprendé con quienes
 						</h2>
-						<h2 className="text-4xl font-bold text-blue-500 mb-6">
+						<h2 className="text-4xl text-center font-bold text-blue-500 mb-6">
 							ya pasaron por ahí
 						</h2>
-						<p className="text-gray-600 font-medium">
+						<p className="text-gray-600 text-center font-medium">
 							Accedé a ayuda personalizada, de estudiante a estudiante, cuándo
 							más lo necesites.
 						</p>
@@ -101,7 +101,7 @@ export default function Login() {
 					)}
 
 					<div className="mb-6">
-						<p className="text-center text=lg font-medium text-gray-700">
+						<p className="text-center text=lg font-medium text-gray-700 text-pretty">
 							Ingresá a tutorcito
 						</p>
 					</div>
@@ -114,14 +114,83 @@ export default function Login() {
 						className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md hover:bg-gray-50 mb-4"
 					>
 						<div className="flex items-center">
-							<div className="bg-blue-500 text-white p-1 rounded mr-3">
-                                
+							<div className="text-white p-1 rounded mr-3">
+								<Image
+									src={"/googleLogo.png"}
+									alt="google logo"
+									height={20}
+									width={20}
+								/>
 							</div>
 							<span className="text-gray-700">Ingresar con Google</span>
 						</div>
 					</Button>
+
+					{/* Formulario tradicional (opcional) */}
+					<div className="hidden">
+						<form onSubmit={handleEmailLogin} className="space-y-4">
+							<div>
+								<label
+									htmlFor="email"
+									className="block text-sm font-medium text-gray-700"
+								>
+									Email
+								</label>
+								<input
+									id="email"
+									name="email"
+									type="email"
+									required
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+									className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md"
+								/>
+							</div>
+
+							<div>
+								<label
+									htmlFor="password"
+									className="block text-sm font-medium text-gray-700"
+								>
+									Contraseña
+								</label>
+								<input
+									id="password"
+									name="password"
+									type="password"
+									required
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+									className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md"
+								/>
+							</div>
+
+							<div>
+								<button
+									type="submit"
+									disabled={isLoading}
+									className="w-full px-4 py-2 text-white font-medium bg-blue-500 rounded-md hover:bg-blue-600"
+								>
+									{isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
+								</button>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
+
+            {/*  Lado derecho - imagen */}
+            <div className="hidden md:block md:w-1/2 bg-gray-100">
+                <div className="h-full w-full relative">
+                    <Image
+                        src={"/onboarding-pic.png"}
+                        alt="Students having a tutoring session together."
+                        height={2200}
+                        width={1440}
+                        className="absolute inset-0 bg-cover bg-center h-full w-full"
+                    />
+                </div>
+            </div>
 		</div>
 	);
 }
