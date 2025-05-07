@@ -1,5 +1,4 @@
 import React from 'react'
-import ResourcesCard from './resourcesCard'
 import {
     Card,
     CardContent,
@@ -9,14 +8,10 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
-
-
-
 const CardsCta = () => {
     return (
         <div className="flex flex-wrap justify-center gap-8 p-8 ">
-        
-        <Card className="w-110 rounded-lg shadow-md overflow-hidden border-transparent bg-[#FFFFFF] ">
+        <Card className="w-110 rounded-lg shadow-md shadow-blue-200 overflow-hidden border-transparent bg-[#FFFFFF] ">
           <CardHeader className="pb-2">
             <CardTitle className="text-center text-xl">
               ¿Querés generar ingresos mientras estudias?
@@ -38,21 +33,18 @@ const CardsCta = () => {
               </li>
             </ul>
           </CardContent>
-          <CardFooter>
+          <CardFooter className='mt-auto'>
             <button className="w-full bg-[#0077B6] text-white py-3 px-4 rounded font-medium hover:bg-blue-700 transition-colors">
               ¡Quiero ser tutor!
             </button>
           </CardFooter>
-        </Card>
-  
         
-
-
-        <Card className="w-110 rounded-lg shadow-md overflow-hidden bg-[#0077B6] text-white border-transparent">
-          <CardHeader className="pb-0">
-            <CardTitle className="text-center text-xl">
-              ¿Ya sos tutor y querés llegar a más estudiantes? 
-            </CardTitle>
+        </Card>
+          <Card className="w-110 rounded-lg shadow-md shadow-blue-200 overflow-hidden bg-[#0077B6] text-white border-transparent">
+            <CardHeader className="pb-0">
+              <CardTitle className="text-center text-xl">
+                ¿Ya sos tutor y querés llegar a más estudiantes? 
+              </CardTitle>
             <CardDescription className="text-center text-white text-sm mt-3">
               por solo ARS 5,000/mes:
             </CardDescription>
@@ -73,7 +65,7 @@ const CardsCta = () => {
               </li>
             </ul>
           </CardContent>
-          <CardFooter>
+          <CardFooter className='mt-auto'>
             <button className="w-full bg-black text-white py-3 px-4 rounded font-medium hover:bg-gray-800 transition-colors">
               Ser tutor patrocinado
             </button>
