@@ -1,5 +1,12 @@
 import React from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import Image from "next/image";
 
 interface classCardProps {
@@ -13,7 +20,7 @@ function ClassCard({ subject, students, tutors, classImage }: classCardProps) {
   return (
     <Card>
       <CardHeader>
-        <Image src={classImage} width={280} height={56} alt="Class Image"/>
+        <Image src={classImage} width={280} height={56} alt="Class Image" />
         <CardTitle>{subject}</CardTitle>
         <CardDescription>Card Description</CardDescription>
       </CardHeader>
