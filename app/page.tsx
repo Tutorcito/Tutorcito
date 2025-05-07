@@ -7,7 +7,5 @@ import ResourceCarrusel from "@/components/ResourceCarrusel";
 export default function Home() {
   return (
     <ResourceCarrusel/>
-
-   
   );
 }
