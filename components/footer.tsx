@@ -4,16 +4,16 @@ import React from 'react';
 //chequear si hay errores con el responsive
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-white border-t py-6 px-4 text-gray-600 flex flex-col md:flex-row items-center justify-between">
+    <footer className="bg-white border-t py-4 px-4 text-gray-600 flex flex-col md:flex-row items-center justify-between fixed bottom-0 w-full">
       
       {/* Sección de logo + nombre */}
-      <div className="flex items-center mb-4 md:mb-0">
-        <img src="/tutorcito-logo.png" alt="Tutorcito logo" className="h-16 mr-2" />
+      <div className="flex items-center mb-2 md:mb-0">
+        <img src="/tutorcito-logo.png" alt="Tutorcito logo" className="h-8 mr-2" />
         <span className="font-semibold text-lg">Tutorcito</span>
       </div>
 
       {/* Navegación central */}
-      <nav className="flex flex-wrap justify-center gap-6 text-sm">
+      <nav className="flex flex-wrap justify-center gap-4 text-sm">
         <a href="#" className="hover:underline">Tutores populares</a>
         <a href="#" className="hover:underline">Clases populares</a>
         <a href="#" className="hover:underline">Recursos</a>
