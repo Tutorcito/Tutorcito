@@ -28,7 +28,7 @@ const ProfileCardContainer: React.FC = () => {
 
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-200">
       <div className="w-full max-w-md shadow-lg overflow-hidden bg-white rounded-lg">
         <ProfileBanner bannerUrl="" avatarUrl="" />
         <ProfileHeader 
@@ -36,7 +36,7 @@ const ProfileCardContainer: React.FC = () => {
           title={userData.title} 
           year={userData.year} 
         />
-        <div className="space-y-4 p-6 bg-amber-900">
+        <div className="space-y-4 p-6 bg-white mb-6">
           <AboutMe content={userData.aboutMeContent} />
           
           <PricingSection 
