@@ -23,7 +23,7 @@ export default function AuthCallback() {
 					.single();
 
 				if (profileError && profileError.code === "PGRST116") {
-					router.push("/onboarding/step1");
+					router.push("/auth/onboarding/step1");
 				} else {
 					router.push("/");
 				}

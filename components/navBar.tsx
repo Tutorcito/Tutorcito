@@ -58,6 +58,7 @@ export default function Navbar() {
           Ingresar
         </Button>
       )}
+
     </nav>
   );
 }
