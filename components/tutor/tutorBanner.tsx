@@ -1,4 +1,5 @@
 import React from 'react'
+
 type TutorBannerProps = {
     bannerUrl?: string;
     avatarUrl?: string;
@@ -9,8 +10,8 @@ const TutorBanner: React.FC<TutorBannerProps> = ({ bannerUrl, avatarUrl }) => {
         <div className="relative">
             {/* Banner */}
             <div
-                className="h-32 bg-blue-600"
-                style={bannerUrl ? { backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover' } : {}}
+                className="h-40 bg-blue-600"
+                style={bannerUrl ? { backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
             ></div>
 
             {/* Foto de perfil */}

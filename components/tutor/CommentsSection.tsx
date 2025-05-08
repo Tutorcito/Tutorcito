@@ -12,20 +12,27 @@ interface CommentsSectionProps {
 
 export default function CommentsSection({ comments }: CommentsSectionProps) {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg mt-15">
-      <h2 className="text-lg font-semibold mb-4">Comentarios</h2>
+    <div>
+      <h2 className="text-xl font-semibold mb-4">Comentarios</h2>
       <div className="space-y-6">
         {comments.map((comment, idx) => (
           <div
             key={idx}
-            className="border-b border-gray-200 pb-4 mb-4 last:border-none"
+            className="bg-white p-4 rounded-md shadow-sm mb-4"
           >
-            <p className="font-semibold">{comment.name}</p>
-            <p className="text-sm text-gray-500">{comment.date}</p>
-            <p className="text-yellow-500 text-sm">
-              {"★".repeat(comment.rating)}
-            </p>
-            <p className="text-gray-700">{comment.text}</p>
+            <div className="flex items-center mb-2">
+              <div className="w-10 h-10 rounded-full bg-gray-300 mr-3"></div>
+              <div>
+                <p className="font-semibold">{comment.name}</p>
+                <div className="flex items-center">
+                  <p className="text-yellow-400 mr-2">
+                    {"★".repeat(comment.rating)}
+                  </p>
+                  <p className="text-xs text-gray-500">{comment.date}</p>
+                </div>
+              </div>
+            </div>
+            <p className="text-gray-700 text-sm">{comment.text}</p>
           </div>
         ))}
       </div>

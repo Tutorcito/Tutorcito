@@ -7,49 +7,54 @@ export default function TutorPage() {
   // Datos del tutor
   const tutorData = {
     // Datos básicos del perfil
-    name: "Alvaro Aguero",
-    specialty: "Profesor de Matemáticas",
+    name: "Joaquín Cortez",
+    specialty: "Laboratorio III | Programación II",
+    rating: 4.7,
     bannerUrl: "/api/placeholder/800/200", // Placeholder para demostración
     avatarUrl: "/api/placeholder/200/200", // Placeholder para demostración
     
     // Contenido de la sección "Sobre mí"
-    aboutMe: "Soy profesor de matemáticas con más de 8 años de experiencia enseñando a estudiantes de secundaria y universidad. Me especializo en álgebra, cálculo y estadística. Mi enfoque de enseñanza es práctico y personalizado, adaptándome a las necesidades de cada estudiante para ayudarles a desarrollar confianza y comprensión de los conceptos matemáticos.",
+    aboutMe: "Soy estudiante de Informática de 2do año. Me dedico a crear agentes de IA con Python y OpenAI. Puedo ayudarte con tu lógica de programación en lenguajes como Python, JavaScript y Node.",
     
     // Conocimientos del tutor
     knowledge: [
-      { icon: "📊", label: "Estadística" },
-      { icon: "➗", label: "Álgebra" },
-      { icon: "📈", label: "Cálculo" },
-      { icon: "🧠", label: "Lógica" },
-      { icon: "📝", label: "Preparación para exámenes" }
+      { icon: "📊", label: "Análisis secundario" },
+      { icon: "📝", label: "Materias aprobadas" },
+      { icon: "👨‍🎓", label: "Alumno regular" }
     ],
     
     // Precios de las clases
     prices: [
       { price: "ARS 3.500", duration: "30 min" },
       { price: "ARS 5.000", duration: "60 min" },
-      { price: "ARS 7.500", duration: "100 min" }
+      { price: "ARS 7.500", duration: "90 min" }
     ],
     
     // Comentarios de estudiantes
     comments: [
       {
-        name: 'Carlitos Rodríguez',
+        name: 'Fede Martorell',
         date: '10/04/25',
         rating: 5,
-        text: 'Excelente tutor, muy claro y paciente. Me ayudó a entender conceptos que me habían costado mucho tiempo.'
+        text: 'Forem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
       },
       {
-        name: 'Federico Martorell',
-        date: '01/04/25',
-        rating: 4,
-        text: 'Me ayudó bastante con los temas difíciles de cálculo. Recomendada.'
-      },
-      {
-        name: 'Lucía Méndez',
-        date: '25/03/25',
+        name: 'Joaco González',
+        date: '10/04/25',
         rating: 5,
-        text: 'Gracias a sus clases pude aprobar mi examen final con una nota excelente.'
+        text: 'Forem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
+      },
+      {
+        name: 'Fede Martorell',
+        date: '10/04/25',
+        rating: 5,
+        text: 'Forem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
+      },
+      {
+        name: 'Joaco González',
+        date: '10/04/25',
+        rating: 5,
+        text: 'Forem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
       }
     ]
   };
@@ -72,7 +77,7 @@ export default function TutorPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
-      <TutorProfileContainer 
+      <TutorProfileContainer  
         tutorData={tutorData}
         onEditAbout={handleEditAbout}
         onEditKnowledge={handleEditKnowledge}
