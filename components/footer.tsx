@@ -4,7 +4,7 @@ import React from 'react';
 //chequear si hay errores con el responsive
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-white border-t py-4 px-4 text-gray-600 flex flex-col md:flex-row items-center justify-between fixed bottom-0 w-full">
+    <footer className="bg-white border-t py-4 px-4 text-gray-500 flex flex-col md:flex-row items-center justify-between fixed bottom-0 w-full">
       
       {/* Sección de logo + nombre */}
       <div className="flex items-center mb-2 md:mb-0">
