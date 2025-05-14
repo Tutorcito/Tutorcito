@@ -1,5 +1,5 @@
 "use client";
-
+import { EditProfileDialog } from "@/components/ui/EditProfileDialog"
 import React from 'react';
 import TutorProfileContainer from '@/components/tutor/tutorContainer';
 
@@ -77,6 +77,7 @@ export default function TutorPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
+      <EditProfileDialog />
       <TutorProfileContainer  
         tutorData={tutorData}
         onEditAbout={handleEditAbout}
