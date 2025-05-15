@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -25,9 +24,8 @@ export default function Step2() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const getProfile = async () => {
-		const {
-			data: { user },
-		} = await supabase.auth.getUser();
+		const { data: { user } } = await supabase.auth.getUser();
+		console.log("Authenticated user ID: ", user?.id);
 		if (!user) {
 			router.push("/auth/login");
 			return;
@@ -41,20 +39,24 @@ export default function Step2() {
 			.eq("id", user.id)
 			.single();
 
+		if (error) {
+			console.error("Failed to fetch profile: ", error.message);
+		};
+
 		if (data) {
 			setProfile(data);
-		}
+		};
 
 		if (!data.role) {
 			router.push("/auth/onboarding/step1");
 			return;
-		}
+		};
 
 		if (data.full_name) {
 			const nameParts = data.full_name.split(" ");
 			setFirstName(nameParts[0] || "");
 			setLastName(nameParts.slice(1).join(" ") || "");
-		}
+		};
 		setDegree(data.degree || "");
 		setYear(data.year_in_degree ? data.year_in_degree.toString() : "");
 	};
@@ -70,24 +72,39 @@ export default function Step2() {
 
 		try {
 			const fullName = `${firstName} ${lastName}`.trim();
-			const yearNumber = parseInt(year, 10);
+			const yearMap: Record<string, number> = {
+				"1er": 1,
+				"2do": 2,
+				"3er": 3,
+				"4to": 4,
+				"5to": 5,
+				"6to": 6,
+				"Otro": 0,
+			};
 
-			await supabase
+			const yearNumber = yearMap[year];
+
+			const { error } = await supabase
 				.from("profiles")
 				.update({
 					full_name: fullName,
 					degree: degree,
 					year_in_degree: yearNumber,
 				})
-				.eq("id", user.id);
+				.eq("id", user.id)
+				.select()
 
+				console.log("Updated payload: ", { firstName, degree, yearNumber });
+
+			if (error) {
+				console.error("Supabase update error: ", error.message);
+				return;
+			};
+				
 			const isTutor = profile?.role === "tutor" || profile?.role === "ambos";
 
-			if (isTutor) {
-				router.push("/auth/onboarding/step3");
-			} else {
-				router.push("/");
-			}
+			router.push(isTutor ? "/auth/onboarding/step3" : "/");
+
 		} catch (error) {
 			console.error("Error saving profile: ", error);
 		} finally {
@@ -222,7 +239,7 @@ export default function Step2() {
                     variant={'default'}
                     disabled={!isFormValid || isLoading}
                     onClick={handleNext}
-                    className="w-full max-w-xs"
+                    className="w-full max-w-xs bg-blue-500 text-white"
                 >
                     {isLoading ? "Guardando..." : "Siguiente"}
                 </Button>

@@ -42,10 +42,19 @@ export default function Step1() {
                 .update({role: selectedRole})
                 .eq('id', user.id);
             } else {
-                await supabase
+                const { error } = await supabase
                 .from('profiles')
-                .insert([{ id: user.id, role: selectedRole }]);
-            }
+                .insert([
+                    { 
+                        id: user.id, 
+                        role: selectedRole,
+                    },
+                ]);
+
+                if (error) {
+                    console.error("Role insert failed: ", error.message);
+                };
+            };
             router.push('/auth/onboarding/step2');
         } catch (error) {
             console.error('Error saving role: ', error);

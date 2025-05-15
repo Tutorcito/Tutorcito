@@ -1,5 +1,5 @@
 "use client";
-import { EditProfileDialog } from "@/components/ui/EditProfileDialog"
+import { EditProfileDialog } from "@/components/EditProfileDialog"
 import React from 'react';
 import TutorProfileContainer from '@/components/tutor/tutorContainer';
 
