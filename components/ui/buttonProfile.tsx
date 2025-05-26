@@ -18,7 +18,7 @@ export default function ButtonProfile({ user }: { user: User }) {
     <Link href="/perfil">
       <div className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded hover:bg-gray-100 transition-colors">
         <Image
-          src="/javier-milei.jpg"
+          src="/tutorperfil.jpg"
           alt="Avatar del usuario"
           width={38}
           height={32}

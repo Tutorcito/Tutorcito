@@ -7,11 +7,11 @@ import NotebookLMLogo from '../public/NotebookLM.png';
 
 const ResourceCarrusel = () => {
     return (
-        <div className='flex flex-col container p-20 w-auto'>
+        <div className='flex flex-col items-center justify-center w-full py-10'>
             <h3 className='flex text-2xl font-medium mx-1'>Recursos útiles para estudiantes</h3>
             <div className='flex flex-col p-8 items-center justify-center '>
 
-                <div className="flex gap-4 items-center justify-center bg-[#E6F1F8] p-8 w-auto rounded-lg">
+                <div className="flex gap-4 items-center justify-center bg-[#E6F1F8] p-8  rounded-lg">
                     <ResourcesCard
                         icon={ExcalidrawLogo.src}
                         description1="Mapas mentales"

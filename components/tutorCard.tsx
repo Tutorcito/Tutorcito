@@ -10,22 +10,21 @@ interface tutorCardProps {
   subjects: string;
 }
 
-const tutorCard = ({ name, profileImage, subjects }: tutorCardProps) => {
+const TutorCard = ({ name, profileImage, subjects }: tutorCardProps) => {
   //destructuracion
 
   return (
     <Card>
       <CardHeader>
-        <Image src={profileImage} alt="Profile Image"/>   //image de next.
+        <Image src={profileImage} alt="Profile Image" width={156} height={24}/>
         <CardTitle>{name}</CardTitle>
         <CardDescription>Card Description</CardDescription>
       </CardHeader>
       <CardContent>
         <p>{subjects}</p>
-        //Reseñas 
       </CardContent>
     </Card>
   );
 };
 
-export default tutorCard;
+export default TutorCard;
