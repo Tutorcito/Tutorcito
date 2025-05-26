@@ -20,7 +20,7 @@ function ClassCard({ subject, students, tutors, classImage }: classCardProps) {
   return (
     <Card>
       <CardHeader>
-        <Image src={classImage} width={260} height={56} alt="Class Image" />
+        <Image src={classImage} width={270} height={56} alt="Class Image" />
         <CardTitle>{subject}</CardTitle>
         <CardDescription>Card Description</CardDescription>
       </CardHeader>
