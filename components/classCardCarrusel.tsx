@@ -23,7 +23,7 @@ interface ClassCardCarouselProps {
 
 const ClassCardCarousel = ({ classes, title = "Materias Disponibles" }: ClassCardCarouselProps) => {
   return (
-    <div className="w-full max-w-7xl mx-auto px-4">
+    <div className="w-full max-w-7xl mx-auto px-4 py-10">
       {/* Título del carrusel */}
       {title && (
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
