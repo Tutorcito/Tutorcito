@@ -1,9 +1,6 @@
 import CardsCta from "@/components/cardsCta";
-import ClassCard from "@/components/classCard";
 import ClassCardCarousel from "@/components/classCardCarrusel";
-import ProfileCardConteainer from "@/components/profileCard/profileCardContainer";
 import ResourceCarrusel from "@/components/ResourceCarrusel";
-import TutorCard from "@/components/tutorCard";
 import TutorCarousel from "@/components/tutorCarrusel";
 const tutorsData = [
     {
@@ -106,8 +103,6 @@ export default function Home() {
           classes={classesData}
           title="Explora Nuestras Materias"
         />
-
-    <ProfileCardConteainer />
     <ResourceCarrusel />
     <CardsCta />
     </>

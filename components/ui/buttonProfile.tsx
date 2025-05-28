@@ -1,24 +1,50 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import Image from "next/image";
 
-interface UserMetadata {
-  name?: string;
-  avatar_url?: string;
-}
+interface ProfileData {
+  full_name: string | null;
+  profile_picture: string | null;
+};
 
-interface User {
-  user_metadata: UserMetadata;
-}
+export default function ButtonProfile() {
+  const [profile, setProfile] = useState<ProfileData | null>(null);
 
-export default function ButtonProfile({ user }: { user: User }) {
-  const name = user?.user_metadata?.name || "Perfil";
-  // const avatar = user?.user_metadata?.avatar_url || "/default-avatar.png";
+  const fetchProfile = async () => {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      console.error("Error obteniendo usuario: ", userError);
+    };
+
+    const { data, error } = await supabase
+    .from("profiles")
+    .select('full_name, profile_picture')
+    .eq('id', user?.id)
+    .single();
+
+    if (error) {
+      console.error("Error de fetch del perfil: ", error);
+    } else {
+      setProfile(data);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const name = profile?.full_name || "Perfil";
+  const avatar = profile?.profile_picture || "/logo.png"
 
   return (
     <Link href="/perfil">
       <div className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded hover:bg-gray-100 transition-colors">
         <Image
-          src="/tutorperfil.jpg"
+          src={avatar}
           alt="Avatar del usuario"
           width={38}
           height={32}

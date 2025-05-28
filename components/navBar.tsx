@@ -6,9 +6,11 @@ import { Button } from "./ui/button";
 import ButtonProfile from "./ui/buttonProfile";
 import { supabase } from "@/lib/supabase";
 import type { User } from "@supabase/supabase-js";
-
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const getUser = async () => {
@@ -31,34 +33,41 @@ export default function Navbar() {
     };
   }, []);
 
-  const handleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google", // o github, etc.
-    });
+  const handleLogin = () => {
+    router.push("/auth/login")
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-  };
   return (
-    <nav className="flex items-center justify-between  px-5 py-4 bg-white shadow-md h-12 ">
-      <div className="flex items-center space-x-1">
-        <Image src="/logo.png" alt="Logo Tutorcito" width={40} height={32} className="w-auto h-auto object-fill" />
-        <span className="text-lg font-bold  ">Tutorcito</span>
-      </div>
-
-      {user ? (
-        <ButtonProfile user={user} />
-      ) : (
-        <Button
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-          onClick={handleLogin}
+    <header className="sticky top-0 z-50 bg-white/80 bacdrop-blur-md border border-gray-200 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <Link 
+          className="flex items-center justify-center gap-2"
+          href={"/"}
         >
-          Ingresar
-        </Button>
-      )}
+          <Image
+            src={"/tutorcito-logo.png"}
+            alt="Logo de Tutorcito"
+            width={56}
+            height={56}
+          />
+          <div className="text-xl font-semibold">Tutorcito</div>
+        </Link>
+          <div className="flex items-center gap-4">
+            {user ? (
+              <ButtonProfile />
+            ) : (
+              <Button
+                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                onClick={handleLogin}
+              >
+                Ingresar
+              </Button>
+            )}
+          </div>
+      </div>
+      
+    </header>
 
-    </nav>
+
   );
 }
