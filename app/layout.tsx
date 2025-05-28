@@ -1,13 +1,7 @@
-"use client";
-
 import type { Metadata } from "next";
+import RootLayoutClient from "./layout.client";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { usePathname } from "next/navigation";
-
-import { AuthProvider } from "@/context/AuthContext";
-import NavBar from "@/components/navBar";
-import Footer from "@/components/footer";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -19,24 +13,28 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
+export const metadata: Metadata = {
+	title: "Tutorcito",
+	description: "Conectamos estudiantes con tutores expertos",
+	category: "Educación",
+	keywords: [
+		"Tutorias",
+		"tutores",
+		"Tutores universitarios"
+	]
+};
+
 export default function RootLayout({
 	children,
-}: Readonly<{
+}: {
 	children: React.ReactNode;
-}>) {
-	const pathname = usePathname();
-	const isOnboarding = pathname.startsWith("/auth/onboarding");
-
+}) {
 	return (
 		<html lang="en" suppressHydrationWarning={true}>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				<AuthProvider>
-					{!isOnboarding && <NavBar />}
-					{children}
-					{!isOnboarding && <Footer />}
-				</AuthProvider>
+				<RootLayoutClient>{children}</RootLayoutClient>
 			</body>
 		</html>
 	);

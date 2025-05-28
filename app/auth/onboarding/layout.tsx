@@ -1,7 +1,11 @@
-"use client";
 
 import React, { ReactNode } from "react";
-import Image from "next/image";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Onboarding | Tutorcito",
+	description: "Proceso de onboarding de Tutorcito."
+}
 
 interface OnboardingLayoutProps {
 	children: ReactNode;
