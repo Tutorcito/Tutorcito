@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
 import { Info } from "lucide-react";
@@ -111,7 +112,30 @@ const Step4 = () => {
 					</p>
 				</div>
 			</div>
-            <p className="text-gray-500 font-medium underline mb-10">Guía para configurar Calendly</p>
+
+            {/* Calendly walkthrough video ddialog */}
+            <Dialog >
+                <DialogTrigger className="hover:cursor-pointer">
+                    <p className="text-gray-500 font-medium underline mb-10">Guía para configurar Calendly</p>
+                </DialogTrigger>
+                <DialogContent className="bg-white min-w-3/4">
+                    <DialogHeader>
+                        <DialogTitle>Te ayudamos a configurar tu Calendly!</DialogTitle>
+                        <DialogDescription>
+                            Mirá este video cortito para entender cómo configurar tu calendario y tus ventanas de
+                            disponibilidad correctamente.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <iframe
+                        className="w-full aspect-video mt-4 rounded"
+                        src="https://www.youtube.com/embed/gsgyFZf4Stg"
+                        title="Calendly Tutorial"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    ></iframe>
+                </DialogContent>
+            </Dialog>
+
             <Button
                 onClick={handleSubmit}
                 disabled={isLoading}
