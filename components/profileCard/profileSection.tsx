@@ -13,7 +13,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
   title, 
   children, 
   onEdit,
-  containerClassName = "bg-gray-50",
+  containerClassName = "bg-gray-200 shadow-md",
   titleClassName = "font-semibold mb-2"
 }) => {
   return (

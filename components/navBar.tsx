@@ -45,16 +45,9 @@ export default function Navbar() {
     <nav className="flex items-center justify-between  px-5 py-4 bg-white shadow-md h-12 ">
       <div className="flex items-center space-x-1">
         <Image src="/logo.png" alt="Logo Tutorcito" width={40} height={32} />
-        <span className="text-xl font-bold">Tutorcito</span>
         <span className="text-lg font-bold  ">Tutorcito</span>
       </div>
 
-      <Button
-        variant="default"
-        className="flex items-end w-25 bg-blue-500 text-white py-2 px-4 rounded font-medium hover:bg-blue-600 transition"
-      >
-        Ingresar
-      </Button>
       {user ? (
         <ButtonProfile user={user} />
       ) : (
