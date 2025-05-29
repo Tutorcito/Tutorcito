@@ -28,7 +28,7 @@ const ProfileCardContainer: React.FC = () => {
 
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-200">
+    <div className="flex justify-center items-center ">
       <div className="w-full max-w-md shadow-lg overflow-hidden bg-white rounded-lg">
         <ProfileBanner bannerUrl="" avatarUrl="" />
         <ProfileHeader 

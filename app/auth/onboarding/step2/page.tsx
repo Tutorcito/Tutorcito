@@ -27,10 +27,7 @@ export default function Step2() {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
 	const getProfile = async () => {
-		const {
-			data: { user },
-		} = await supabase.auth.getUser();
-		console.log("Authenticated user ID: ", user?.id);
+		const { data: { user } } = await supabase.auth.getUser();
 		if (!user) {
 			router.push("/auth/login");
 			return;
@@ -317,3 +314,4 @@ export default function Step2() {
 		</div>
 	);
 }
+

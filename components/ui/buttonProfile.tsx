@@ -12,6 +12,7 @@ interface ProfileData {
 
 export default function ButtonProfile() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const fetchProfile = async () => {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -19,6 +20,8 @@ export default function ButtonProfile() {
     if (userError || !user) {
       console.error("Error obteniendo usuario: ", userError);
     };
+
+    if (user) setUserId(user.id);
 
     const { data, error } = await supabase
     .from("profiles")
@@ -41,7 +44,7 @@ export default function ButtonProfile() {
   const avatar = profile?.profile_picture || "/logo.png"
 
   return (
-    <Link href="/perfil">
+    <Link href={`/profiles/${userId}`}>
       <div className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded hover:bg-gray-100 transition-colors">
         <Image
           src={avatar}

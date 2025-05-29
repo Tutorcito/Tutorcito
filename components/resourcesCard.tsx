@@ -45,7 +45,7 @@ function ResourcesCard({ icon, description1, description2, description3,sitelink
       </ul>
 
       <Button variant={"default"}  className="w-full bg-blue-500 text-white py-2 px-4 rounded font-medium hover:bg-blue-600 transition-colors">
-        <Link href={sitelink}>ir al sitio</Link>
+        <Link target="_blank" href={sitelink}>ir al sitio</Link>
       </Button>
 
       </CardContent>
