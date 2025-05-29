@@ -103,6 +103,4 @@ npm run dev
 
 MIT — libre de usar, mejorar y compartir citando la fuente.
 
-
-hola maestrooo
 ---
