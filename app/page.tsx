@@ -5,6 +5,8 @@ import ClassCardCarousel from "@/components/classCardCarrusel";
 import ResourceCarrusel from "@/components/ResourceCarrusel";
 import TutorCarousel from "@/components/tutorCarrusel";
 import SponsoredCarousel from "@/components/SponsoredCarousel";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 const tutorsData = [
     {
       id: 1,
@@ -94,11 +96,47 @@ const classesData = [
     }
   ];
 
-
 export default function Home() {
+  const [profileName, setProfileName] = useState<any>(null);
+
+  const fetchUser = async () => {
+    try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        throw new Error("Error en el fetch del usuario.");
+      };
+      
+
+      const { data, error } = await supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("id", user.id)
+      .single();
+
+      if (error || !data) {
+        throw new Error("Error en el fetch a Supabase.");
+      };
+
+      const name = data.full_name?.split(" ")[0] ?? "Usuario";
+      setProfileName(name);
+
+    } catch (error) {
+      console.error("Hubo un error en el Fetch del usuario: ", error);
+    };
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
     <>
+    <div className="w-full max-w-7xl mx-auto px-4 py-10">
+      <h1 className="text-4xl font-bold text-start">
+        Bienvenido{profileName ? `, ${profileName}` : ""} 👋
+      </h1>
+    </div>
     <SponsoredCarousel />
     <TutorCarousel 
           tutors={tutorsData}
