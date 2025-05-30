@@ -127,7 +127,7 @@ export default function Login() {
 					</Button>
 
 					{/* Formulario tradicional (opcional) */}
-					<div className="hidden">
+					<div className="">
 						<form onSubmit={handleEmailLogin} className="space-y-4">
 							<div>
 								<label

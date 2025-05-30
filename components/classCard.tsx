@@ -18,7 +18,7 @@ function ClassCard({ subject, students, tutors, classImage }: ClassCardProps) {
           src={classImage} 
           alt={`${subject} background`}
           fill
-          className="object-cover"
+          className="object-cover opacity-75"
         />
         {/* Overlay translúcido para mejorar legibilidad */}
         <div className="absolute inset-0 bg-black/45"></div>

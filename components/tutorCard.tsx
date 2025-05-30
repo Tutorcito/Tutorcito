@@ -14,7 +14,7 @@ const TutorCard = ({ name, profileImage, subjects, rating = 5 }: TutorCardProps)
   return (
     <Card className="relative overflow-hidden bg-white shadow-sm border border-gray-200 max-w-sm">
       {/* Background decorativo */}
-      <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-br from-amber-50 to-orange-100 opacity-60"></div>
+      <div className="absolute top-0 left-0 right-0 h-22 bg-gradient-to-br from-blue-100 to-blue-300 opacity-60"></div>
       
       <CardHeader className="relative pt-6 pb-4">
         {/* Imagen de perfil */}
