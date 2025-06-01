@@ -50,8 +50,8 @@ export default function ButtonProfile() {
           src={avatar}
           alt="Avatar del usuario"
           width={38}
-          height={32}
-          className="rounded-full"
+          height={38}
+          className="rounded-full object-cover aspect-square"
         />
         <span className="text-m font-medium text-gray-800">{name}</span>
       </div>
