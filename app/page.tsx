@@ -8,14 +8,6 @@ import SponsoredCarousel from "@/components/SponsoredCarousel";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Input } from "@/components/ui/input";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import FilterDialog from "@/components/FilterDialog";
 const tutorsData = [
 	{
