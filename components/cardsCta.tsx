@@ -10,7 +10,7 @@ import {
 
 const CardsCta = () => {
   return (
-    <div className="flex flex-wrap justify-center gap-8 py-10 ">
+    <div className="flex flex-wrap justify-center gap-8 py-10 mb-32 ">
       <Card className="w-110 rounded-lg shadow-md shadow-blue-200 overflow-hidden border-transparent bg-[#FFFFFF] ">
         <CardHeader className="pb-2">
           <CardTitle className="text-center text-xl">
