@@ -6,6 +6,7 @@ import AboutMe from './aboutMe';
 import KnowledgeTutorCard from './knowledgeTutorCard';
 import PriceCard from './tutorPriceCard';
 import CommentsSection from './CommentsSection';
+import CommentForm from './CommentForm';
 
 type TutorProfileContainerProps = {
   tutorData: {
@@ -33,13 +34,15 @@ type TutorProfileContainerProps = {
   onEditAbout?: () => void;
   onEditKnowledge?: () => void;
   onEditPrices?: () => void;
+  onSubmitComment: (content: string, rating: number) => void;
 };
 
 const TutorProfileContainer: React.FC<TutorProfileContainerProps> = ({
   tutorData,
   onEditAbout,
   onEditKnowledge,
-  onEditPrices
+  onEditPrices,
+  onSubmitComment,
 }) => {
   return (
     <div className="max-w-4xl mx-auto">
@@ -49,11 +52,9 @@ const TutorProfileContainer: React.FC<TutorProfileContainerProps> = ({
           bannerUrl={tutorData.bannerUrl} 
           avatarUrl={tutorData.avatarUrl} 
         />
-        
-        {/* Espacio para acomodar el avatar que se desborda del banner */}
+
         <div className="h-14"></div>
-        
-        {/* Nombre del tutor y detalles generales */}
+
         <div className="text-center mb-4">
           <h1 className="text-2xl font-bold">{tutorData.name}</h1>
           <p className="text-gray-600">{tutorData.specialty}</p>
@@ -68,29 +69,27 @@ const TutorProfileContainer: React.FC<TutorProfileContainerProps> = ({
           </button>
         </div>
       </div>
-      
+
       {/* Contenido principal en dos columnas */}
       <div className="flex flex-col md:flex-row gap-6 px-4">
         {/* Columna izquierda para comentarios */}
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 space-y-4">
+          <CommentForm onSubmit={onSubmitComment} />
           <CommentsSection comments={tutorData.comments} />
         </div>
-        
+
         {/* Columna derecha para información del tutor */}
         <div className="w-full md:w-1/2 space-y-4">
-          {/* Sobre Mí */}
           <AboutMe 
             content={tutorData.aboutMe} 
             onEdit={onEditAbout}
           />
-          
-          {/* Precios */}
+
           <PriceCard 
             prices={tutorData.prices} 
             onEdit={onEditPrices}
           />
-          
-          {/* Conocimientos */}
+
           <KnowledgeTutorCard 
             items={tutorData.knowledge} 
             onEdit={onEditKnowledge}
