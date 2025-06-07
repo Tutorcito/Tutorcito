@@ -35,7 +35,7 @@ const Step4 = () => {
     const handleSubmit = async () => {
         setIsLoading(true);
         const { error } = await supabase
-        .from('profles')
+        .from('profiles')
         .update({ phone_number: phone, calendly_link: calendly })
         .eq('id', userId);
 
