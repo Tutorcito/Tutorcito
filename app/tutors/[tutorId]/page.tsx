@@ -10,6 +10,11 @@ import { Database } from "@/types/supabase";
 export default function TutorPage() {
   const params = useParams();
   const tutorId = typeof params?.tutorId === "string" ? params.tutorId : "";
+  if (!tutorId) {
+    return <div className="text-center py-10">Esperando ID del tutor...</div>;
+  }
+  console.log("params:", params);
+console.log("tutorId:", tutorId);
 
   const [comments, setComments] = useState<Database["public"]["Tables"]["tutor_comments"]["Row"][]>([]);
   const [profilesMap, setProfilesMap] = useState<Record<string, { full_name: string }>>({});
