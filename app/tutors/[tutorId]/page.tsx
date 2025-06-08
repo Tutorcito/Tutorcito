@@ -1,88 +1,154 @@
 "use client";
-import { EditProfileDialog } from "@/components/EditProfileDialog"
-import React from 'react';
-import TutorProfileContainer from '@/components/tutor/tutorContainer';
+
+import React, { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import TutorProfileContainer from "@/components/tutor/tutorContainer";
+import { EditProfileDialog } from "@/components/EditProfileDialog";
+import { useParams } from "next/navigation";
+import { Database } from "@/types/supabase";
 
 export default function TutorPage() {
-  // Datos del tutor
+  const params = useParams();
+  const tutorId = typeof params?.tutorId === "string" ? params.tutorId : "";
+
+  const [comments, setComments] = useState<Database["public"]["Tables"]["tutor_comments"]["Row"][]>([]);
+  const [profilesMap, setProfilesMap] = useState<Record<string, { full_name: string }>>({});
+  const [tutorProfile, setTutorProfile] = useState<Database["public"]["Tables"]["profiles"]["Row"] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTutor = async () => {
+      if (!tutorId) return;
+      setProfileLoading(true);
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", tutorId)
+        .eq("role", "tutor")
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error loading tutor profile", error);
+      } else {
+        setTutorProfile(data);
+      }
+      setProfileLoading(false);
+    };
+
+    fetchTutor();
+  }, [tutorId]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      if (!tutorId) return;
+
+      const { data: commentsData, error } = await supabase
+        .from("tutor_comments")
+        .select("*, user_id")
+        .eq("tutor_id", tutorId)
+        .order("created_at", { ascending: false });
+
+      if (error) return console.error(error);
+      setComments(commentsData || []);
+
+      const userIds = [...new Set((commentsData || []).map((c:any) => c.user_id))];
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("id, full_name")
+        .in("id", userIds);
+
+      const profileMap = Object.fromEntries(
+        (profileData || []).map((p:any) => [p.id, { full_name: p.full_name }])
+      );
+      setProfilesMap(profileMap);
+    };
+
+    fetchComments();
+  }, [tutorId]);
+
+  const handleSubmitComment = async (content: string, rating: number) => {
+    setLoading(true);
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      alert("Debes estar autenticado para comentar.");
+      setLoading(false);
+      return;
+    }
+
+    const { data, error } = await supabase.from("tutor_comments").insert([
+      {
+        tutor_id: tutorId,
+        user_id: user.id,
+        content,
+        rating,
+      },
+    ]);
+
+    if (error) {
+      alert("Error al enviar comentario");
+      console.error(error);
+    } else {
+      setComments((prev) => [
+        ...(data || []),
+        ...prev,
+      ]);
+    }
+    setLoading(false);
+  };
+
+  if (profileLoading) {
+    return <div className="text-center py-10">Cargando perfil del tutor...</div>;
+  }
+
+  if (!tutorProfile) {
+    return <div className="text-center py-10 text-red-600">Perfil de tutor no encontrado.</div>;
+  }
+
+  const formattedComments = comments.map((c) => ({
+    name: profilesMap[c.user_id]?.full_name || "Anon",
+    date: new Date(c.created_at || "").toLocaleDateString(),
+    rating: c.rating || 5,
+    text: c.content,
+  }));
+
   const tutorData = {
-    // Datos básicos del perfil
-    name: "Joaquín Cortez",
+    name: tutorProfile.full_name || "Tutor sin nombre",
     specialty: "Laboratorio III | Programación II",
-    rating: 4.7,
-    bannerUrl: "/api/placeholder/800/200", // Placeholder para demostración
-    avatarUrl: "/api/placeholder/200/200", // Placeholder para demostración
-    
-    // Contenido de la sección "Sobre mí"
-    aboutMe: "Soy estudiante de Informática de 2do año. Me dedico a crear agentes de IA con Python y OpenAI. Puedo ayudarte con tu lógica de programación en lenguajes como Python, JavaScript y Node.",
-    
-    // Conocimientos del tutor
+    rating:
+      comments.reduce((sum, c) => sum + (c.rating || 5), 0) /
+      (comments.length || 1),
+    bannerUrl: "/api/placeholder/800/200",
+    avatarUrl: tutorProfile.profile_picture || "/api/placeholder/200/200",
+    aboutMe:
+      "Soy estudiante de Informática de 2do año. Me dedico a crear agentes de IA con Python y OpenAI. Puedo ayudarte con tu lógica de programación en lenguajes como Python, JavaScript y Node.",
     knowledge: [
       { icon: "📊", label: "Análisis secundario" },
       { icon: "📝", label: "Materias aprobadas" },
-      { icon: "👨‍🎓", label: "Alumno regular" }
+      { icon: "👨‍🎓", label: "Alumno regular" },
     ],
-    
-    // Precios de las clases
     prices: [
       { price: "ARS 3.500", duration: "30 min" },
       { price: "ARS 5.000", duration: "60 min" },
-      { price: "ARS 7.500", duration: "90 min" }
+      { price: "ARS 7.500", duration: "90 min" },
     ],
-    
-    // Comentarios de estudiantes
-    comments: [
-      {
-        name: 'Fede Martorell',
-        date: '10/04/25',
-        rating: 5,
-        text: 'Forem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
-      },
-      {
-        name: 'Joaco González',
-        date: '10/04/25',
-        rating: 5,
-        text: 'Forem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
-      },
-      {
-        name: 'Fede Martorell',
-        date: '10/04/25',
-        rating: 5,
-        text: 'Forem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
-      },
-      {
-        name: 'Joaco González',
-        date: '10/04/25',
-        rating: 5,
-        text: 'Forem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
-      }
-    ]
-  };
-
-  // Funciones para manejar la edición
-  const handleEditAbout = () => {
-    console.log('Editando sobre mí');
-    // Implementar lógica de edición
-  };
-
-  const handleEditKnowledge = () => {
-    console.log('Editando conocimientos');
-    // Implementar lógica de edición
-  };
-
-  const handleEditPrices = () => {
-    console.log('Editando precios');
-    // Implementar lógica de edición
+    comments: formattedComments,
   };
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <EditProfileDialog />
-      <TutorProfileContainer  
+      <TutorProfileContainer
         tutorData={tutorData}
-        onEditAbout={handleEditAbout}
-        onEditKnowledge={handleEditKnowledge}
-        onEditPrices={handleEditPrices}
+        onEditAbout={() => {}}
+        onEditKnowledge={() => {}}
+        onEditPrices={() => {}}
+        onSubmitComment={handleSubmitComment}
+        submitting={loading}
       />
     </div>
   );
