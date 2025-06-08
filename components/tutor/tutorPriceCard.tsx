@@ -19,15 +19,13 @@ const PriceCard: React.FC<PriceCardProps> = ({ prices, onEdit }) => {
       containerClassName="bg-blue-100" 
       titleClassName="font-medium mb-3"
     >
-      <div className="flex justify-between text-center">
+      <div className="flex flex-col sm:flex-row justify-between text-center">
         {prices.map((option, index) => (
           <div 
             key={index} 
-            className={`flex-1 p-2 ${
-              index < prices.length - 1 ? "border-r border-gray-300" : ""
-            }`}
+            className={`flex-1 p-4 ${index < prices.length - 1 ? "border-b sm:border-b-0 sm:border-r border-gray-300" : ""}`}
           >
-            <p className="font-bold">{option.price}</p>
+            <p className="font-bold text-lg sm:text-xl">{option.price}</p>
             <p className="text-xs text-gray-600">{option.duration}</p>
           </div>
         ))}

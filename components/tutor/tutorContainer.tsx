@@ -42,7 +42,7 @@ const TutorProfileContainer: React.FC<TutorProfileContainerProps> = ({
   onEditPrices
 }) => {
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Banner y Avatar */}
       <div className="bg-white shadow-sm mb-6">
         <TutorBanner 
@@ -55,22 +55,22 @@ const TutorProfileContainer: React.FC<TutorProfileContainerProps> = ({
         
         {/* Nombre del tutor y detalles generales */}
         <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold">{tutorData.name}</h1>
-          <p className="text-gray-600">{tutorData.specialty}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">{tutorData.name}</h1>
+          <p className="text-gray-600 text-sm sm:text-base">{tutorData.specialty}</p>
           {tutorData.rating && (
             <div className="flex items-center justify-center mt-2">
               <span className="font-bold mr-1">{tutorData.rating}</span>
               <span className="text-yellow-400">★</span>
             </div>
           )}
-          <button className="bg-blue-500 text-white px-6 py-2 rounded-md mt-3 hover:bg-blue-800 mb-10 ">
+          <button className="bg-blue-500 text-white px-6 py-2 rounded-md mt-3 hover:bg-blue-800 mb-10">
             Agendar tutoría
           </button>
         </div>
       </div>
       
       {/* Contenido principal en dos columnas */}
-      <div className="flex flex-col md:flex-row gap-6 px-4">
+      <div className="flex flex-col md:flex-row gap-6">
         {/* Columna izquierda para comentarios */}
         <div className="w-full md:w-1/2">
           <CommentsSection comments={tutorData.comments} />

@@ -10,8 +10,9 @@ import {
 
 const CardsCta = () => {
   return (
-    <div className="flex flex-wrap justify-center gap-8 py-10 mb-32 ">
-      <Card className="w-110 rounded-lg shadow-md shadow-blue-200 overflow-hidden border-transparent bg-[#FFFFFF] ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 px-4 sm:px-0 py-10 mb-32 place-items-center">
+      {/* CARD 1 */}
+      <Card className="w-full max-w-sm rounded-lg shadow-md shadow-blue-200 overflow-hidden border-transparent bg-[#FFFFFF]">
         <CardHeader className="pb-2">
           <CardTitle className="text-center text-xl">
             ¿Querés generar ingresos mientras estudias?
@@ -20,16 +21,16 @@ const CardsCta = () => {
         <CardContent className="pb-6">
           <ul className="space-y-3 mb-8">
             <li className="flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-[#0077B6] mr-1 "></div>
+              <div className="w-2 h-2 rounded-full bg-[#0077B6] mr-1" />
               <span>Vos definís tus horarios.</span>
             </li>
             <li className="flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-[#0077B6] mr-1"></div>
+              <div className="w-2 h-2 rounded-full bg-[#0077B6] mr-1" />
               <span>Generá ingresos por tutorías.</span>
             </li>
             <li className="flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-[#0077B6] mr-1"></div>
-              <span>Ayudas a otros estudiantes.</span>
+              <div className="w-2 h-2 rounded-full bg-[#0077B6] mr-1" />
+              <span>Ayudás a otros estudiantes.</span>
             </li>
           </ul>
         </CardContent>
@@ -39,7 +40,9 @@ const CardsCta = () => {
           </button>
         </CardFooter>
       </Card>
-      <Card className="w-110 rounded-lg shadow-md shadow-blue-200 overflow-hidden bg-[#0077B6] text-white border-transparent">
+
+      {/* CARD 2 */}
+      <Card className="w-full max-w-sm rounded-lg shadow-md shadow-blue-200 overflow-hidden bg-[#0077B6] text-white border-transparent">
         <CardHeader className="pb-0">
           <CardTitle className="text-center text-xl">
             ¿Ya sos tutor y querés llegar a más estudiantes?
@@ -51,15 +54,15 @@ const CardsCta = () => {
         <CardContent className="pb-6">
           <ul className="space-y-3 mb-8">
             <li className="flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-white mr-1 "></div>
+              <div className="w-2 h-2 rounded-full bg-white mr-1" />
               <span>Mejorá tu visibilidad en Tutorcito.</span>
             </li>
             <li className="flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-white mr-1"></div>
+              <div className="w-2 h-2 rounded-full bg-white mr-1" />
               <span>Quedate con el 100% de lo generado.</span>
             </li>
             <li className="flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-white mr-1"></div>
+              <div className="w-2 h-2 rounded-full bg-white mr-1" />
               <span>Mejor porcentaje de conversión.</span>
             </li>
           </ul>

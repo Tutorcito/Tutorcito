@@ -41,82 +41,95 @@ export default function FilterDialog({
 					Filtros
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="bg-white">
+			<DialogContent className="bg-white max-w-lg w-full p-4 sm:p-6">
 				<DialogHeader>
 					<DialogTitle className="text-2xl font-bold">Filtros</DialogTitle>
 				</DialogHeader>
 				<div className="space-y-4">
+					{/* Materias */}
 					<div>
 						<p className="font-semibold mb-2">Materias</p>
-						{[
-							"Programación I",
-							"Programación II",
-							"Matemáticas",
-							"Física",
-							"Química",
-							"Inglés",
-							"Historia",
-							"Geografía",
-							"Biología",
-							"Anatomía",
-						].map((tag) => (
-							<Button
-								key={tag}
-								variant={subjects.includes(tag) ? "default" : "outline"}
-								onClick={() => toggle(subjects, setSubjects, tag)}
-								className={`mr-2 mb-2 ${
-									subjects.includes(tag)
-										? "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
-										: "bg-white text-black border-gray-300 cursor-pointer"
-								}`}
-							>
-								{tag}
-							</Button>
-						))}
+						<div className="flex flex-wrap gap-2">
+							{[
+								"Programación I",
+								"Programación II",
+								"Matemáticas",
+								"Física",
+								"Química",
+								"Inglés",
+								"Historia",
+								"Geografía",
+								"Biología",
+								"Anatomía",
+							].map((tag) => (
+								<Button
+									key={tag}
+									variant={subjects.includes(tag) ? "default" : "outline"}
+									onClick={() => toggle(subjects, setSubjects, tag)}
+									className={`flex-1 min-w-[120px] mb-2 ${
+										subjects.includes(tag)
+											? "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
+											: "bg-white text-black border-gray-300 cursor-pointer"
+									}`}
+								>
+									{tag}
+								</Button>
+							))}
+						</div>
 					</div>
+
+					{/* Carreras */}
 					<div>
 						<p className="font-semibold mb-2">Carreras</p>
-						{[
-							"Ingeniería en Sistemas",
-							"Lic. Informática",
-							"Lic. en Sistemas",
-							"Lic. en Mecánica",
-							"Lic. en Química",
-							"Lic. en Civil",
-							"Lic. en Industrial",
-							"Lic. en Telecomunicaciones",
-						].map((tag) => (
-							<Button
-								key={tag}
-								variant={careers.includes(tag) ? "default" : "outline"}
-								onClick={() => toggle(careers, setCareers, tag)}
-								className={`mr-2 mb-2 ${
-									careers.includes(tag)
-										? "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
-										: "bg-white text-black border-gray-300 cursor-pointer"
-								}`}
-							>
-								{tag}
-							</Button>
-						))}
+						<div className="flex flex-wrap gap-2">
+							{[
+								"Ingeniería en Sistemas",
+								"Lic. Informática",
+								"Lic. en Sistemas",
+								"Lic. en Mecánica",
+								"Lic. en Química",
+								"Lic. en Civil",
+								"Lic. en Industrial",
+								"Lic. en Telecomunicaciones",
+							].map((tag) => (
+								<Button
+									key={tag}
+									variant={careers.includes(tag) ? "default" : "outline"}
+									onClick={() => toggle(careers, setCareers, tag)}
+									className={`flex-1 min-w-[120px] mb-2 ${
+										careers.includes(tag)
+											? "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
+											: "bg-white text-black border-gray-300 cursor-pointer"
+									}`}
+								>
+									{tag}
+								</Button>
+							))}
+						</div>
 					</div>
+
+					{/* Años */}
 					<div>
 						<p className="font-semibold mb-2">Años</p>
-						{["1ro", "2do", "3ro", "4to", "5to", "6to", "otro"].map((tag) => (
-							<Button
-								key={tag}
-								variant={years.includes(tag) ? "default" : "outline"}
-								onClick={() => toggle(years, setYears, tag)}
-								className={`mr-2 mb-2 ${
-									years.includes(tag)
-										? "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
-										: "bg-white text-black border-gray-300 cursor-pointer"
-								}`}
-							>
-								{tag}
-							</Button>
-						))}
+						<div className="flex flex-wrap gap-2">
+							{["1ro", "2do", "3ro", "4to", "5to", "6to", "otro"].map((tag) => (
+								<Button
+									key={tag}
+									variant={years.includes(tag) ? "default" : "outline"}
+									onClick={() => toggle(years, setYears, tag)}
+									className={`flex-1 min-w-[120px] mb-2 ${
+										years.includes(tag)
+											? "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
+											: "bg-white text-black border-gray-300 cursor-pointer"
+									}`}
+								>
+									{tag}
+								</Button>
+							))}
+						</div>
 					</div>
+
+					{/* Aplicar filtros button */}
 					<Button
 						onClick={() => setOpen(false)}
 						className="w-full bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"

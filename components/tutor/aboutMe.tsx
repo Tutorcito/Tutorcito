@@ -12,11 +12,11 @@ const AboutMe: React.FC<AboutMeProps> = ({ content, onEdit }) => {
   return (
     <TutorSection 
       title="Sobre mí" 
-      containerClassName="bg-gray-800 text-white" 
-      titleClassName="font-medium mb-2"
+      containerClassName="bg-gray-800 text-white p-4 sm:p-6 rounded-lg shadow-md" 
+      titleClassName="font-medium mb-4 text-lg sm:text-xl"
       onEdit={onEdit}
     >
-      <p className="text-sm">{content}</p>
+      <p className="text-sm sm:text-base leading-relaxed">{content}</p>
     </TutorSection>
   );
 };
