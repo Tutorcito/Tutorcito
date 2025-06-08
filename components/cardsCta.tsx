@@ -10,9 +10,9 @@ import {
 
 const CardsCta = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 px-4 sm:px-0 py-10 mb-32 place-items-center">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 px-4 sm:px-80 py-10 mb-32 place-items-center">
       {/* CARD 1 */}
-      <Card className="w-full max-w-sm rounded-lg shadow-md shadow-blue-200 overflow-hidden border-transparent bg-[#FFFFFF]">
+      <Card className="w-full max-w-sm h-full max-h-[400px] rounded-lg shadow-md shadow-blue-200 overflow-hidden border-transparent bg-[#FFFFFF] lg:mx-4 mb-4">
         <CardHeader className="pb-2">
           <CardTitle className="text-center text-xl">
             ¿Querés generar ingresos mientras estudias?
@@ -42,7 +42,7 @@ const CardsCta = () => {
       </Card>
 
       {/* CARD 2 */}
-      <Card className="w-full max-w-sm rounded-lg shadow-md shadow-blue-200 overflow-hidden bg-[#0077B6] text-white border-transparent">
+      <Card className="w-full max-w-sm h-full max-h-[400px] rounded-lg shadow-md shadow-blue-200 overflow-hidden bg-[#0077B6] text-white border-transparent lg:mx-4">
         <CardHeader className="pb-0">
           <CardTitle className="text-center text-xl">
             ¿Ya sos tutor y querés llegar a más estudiantes?
