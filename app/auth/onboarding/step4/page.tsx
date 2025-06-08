@@ -35,7 +35,7 @@ const Step4 = () => {
     const handleSubmit = async () => {
         setIsLoading(true);
         const { error } = await supabase
-        .from('profles')
+        .from('profiles')
         .update({ phone_number: phone, calendly_link: calendly })
         .eq('id', userId);
 
@@ -52,7 +52,7 @@ const Step4 = () => {
 	return (
 		<div className="flex flex-col items-center">
 			{/* Progress bar */}
-			<div className="w-full flex justify-between mb-8 gap-1">
+			<div className="w-full flex justify-between mb-8 gap-1 ">
 				<div className="h-1 bg-blue-500 w-1/4 rounded-full"></div>
 				<div className="h-1 bg-blue-500 w-1/4 rounded-full"></div>
 				<div className="h-1 bg-blue-500 w-1/4 rounded-full"></div>
