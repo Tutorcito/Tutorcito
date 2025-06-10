@@ -7,6 +7,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import PaymentButton from "./paymentButton";
+import type { PaymentItem } from "./paymentButton";
+
+const subscriptionItems: PaymentItem[] = [
+  {
+    id: 'premium',
+    title: 'Suscripción Premium',
+    quantity: 1,
+    unit_price: 5000,
+    currency_id: 'ARS',
+  }
+];
+
 
 const CardsCta = () => {
   return (
@@ -68,9 +81,19 @@ const CardsCta = () => {
           </ul>
         </CardContent>
         <CardFooter className="mt-auto">
-          <button className="w-full bg-black text-white py-3 px-4 rounded font-medium hover:bg-gray-800 transition-colors">
+          {/* <button className="w-full bg-black text-white py-3 px-4 rounded font-medium hover:bg-gray-800 transition-colors">
             Ser tutor patrocinado
-          </button>
+          </button> */}
+          <PaymentButton
+            items={subscriptionItems}
+            accessToken="TU_ACCESS_TOKEN_AQUI"
+            className="w-auto px-6 py-2 text-white bg-black hover:bg-gray-900 text-sm rounded-lg"
+            onSuccess={() => console.log('Redirigido')}
+            onError={(e: string) => console.log(e)} backUrls={{
+              success: "http://localhost:3000",
+              failure: "http://localhost:3000",
+              pending: "http://localhost:3000"
+            }}          />
         </CardFooter>
       </Card>
     </div>
