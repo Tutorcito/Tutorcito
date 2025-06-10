@@ -23,7 +23,7 @@ const PriceCard: React.FC<PriceCardProps> = ({ prices, onEdit }) => {
         {prices.map((option, index) => (
           <div 
             key={index} 
-            className={`flex-1 p-4 ${index < prices.length - 1 ? "border-b sm:border-b-0 sm:border-r border-gray-300" : ""}`}
+            className={`flex-1 space-x-2${index < prices.length - 1 ? "border-b sm:border-b-0 sm:border-r border-gray-300" : ""}`}
           >
             <p className="font-bold text-lg sm:text-xl">{option.price}</p>
             <p className="text-xs text-gray-600">{option.duration}</p>

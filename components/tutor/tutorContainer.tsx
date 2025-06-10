@@ -64,39 +64,40 @@ const TutorProfileContainer: React.FC<TutorProfileContainerProps> = ({
 					<p className="text-gray-600 text-sm sm:text-base">
 						{tutorData.specialty}
 					</p>
-					{tutorData.rating && (
-						<div className="flex items-center justify-center mt-2">
-							<span className="font-bold mr-1">
-								{tutorData.rating.toFixed(1)}
-							</span>
-							<span className="text-yellow-400">★</span>
-						</div>
-					)}
-					<button className="bg-blue-500 text-white px-6 py-2 rounded-md mt-3 hover:bg-blue-800 mb-10">
-						Agendar tutoría
-					</button>
+					<div className="flex flex-col items-center justify-center gap-2 mt-2">
+						{tutorData.rating && (
+							<div className="flex items-center justify-center mt-4">
+								<span className="font-bold mr-1">
+									{tutorData.rating.toFixed(1)}
+								</span>
+								<span className="text-yellow-400">★</span>
+							</div>
+						)}
+						<button className="bg-blue-500 text-white px-6 py-2 rounded-md mt-3 hover:bg-blue-800 mb-10">
+							Agendar tutoría
+						</button>
+					</div>
 				</div>
 			</div>
 
 			{/* Contenido principal en dos columnas */}
-			<div className="flex flex-col md:flex-row gap-6">
-				{/* Columna izquierda para comentarios */}
-				<div className="w-full md:w-1/2 space-y-6">
-					{onSubmitComment && (
-						<CommentForm onSubmit={onSubmitComment} loading={submitting} />
-					)}
-					<CommentsSection comments={tutorData.comments} />
-				</div>
 
-				{/* Columna derecha para información del tutor */}
-				<div className="w-full md:w-1/2 space-y-4">
-					<AboutMe content={tutorData.aboutMe} onEdit={onEditAbout} />
-					<PriceCard prices={tutorData.prices} onEdit={onEditPrices} />
-					<KnowledgeTutorCard
-						items={tutorData.knowledge}
-						onEdit={onEditKnowledge}
-					/>
-				</div>
+			{/* Tarjetas en grilla 3 columnas */}
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+				<AboutMe content={tutorData.aboutMe} onEdit={onEditAbout} />
+				<PriceCard prices={tutorData.prices} onEdit={onEditPrices} />
+				<KnowledgeTutorCard
+					items={tutorData.knowledge}
+					onEdit={onEditKnowledge}
+				/>
+			</div>
+
+			{/* Comentarios a pantalla completa */}
+			<div className="w-full space-y-6 mb-8">
+				{onSubmitComment && (
+					<CommentForm onSubmit={onSubmitComment} loading={submitting} />
+				)}
+				<CommentsSection comments={tutorData.comments} />
 			</div>
 		</div>
 	);

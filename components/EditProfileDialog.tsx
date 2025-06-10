@@ -17,7 +17,7 @@ export function EditProfileDialog() {
       <DialogTrigger asChild>
         <Button variant="outline">Edit Profile</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-white">
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
           <DialogDescription>

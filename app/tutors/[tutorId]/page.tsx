@@ -13,8 +13,6 @@ export default function TutorPage() {
   if (!tutorId) {
     return <div className="text-center py-10">Esperando ID del tutor...</div>;
   }
-  console.log("params:", params);
-console.log("tutorId:", tutorId);
 
   const [comments, setComments] = useState<Database["public"]["Tables"]["tutor_comments"]["Row"][]>([]);
   const [profilesMap, setProfilesMap] = useState<Record<string, { full_name: string }>>({});
@@ -30,7 +28,7 @@ console.log("tutorId:", tutorId);
         .from("profiles")
         .select("*")
         .eq("id", tutorId)
-        .eq("role", "tutor")
+        .in("role", ["tutor", "ambos"])
         .maybeSingle();
 
       if (error) {
@@ -127,7 +125,7 @@ console.log("tutorId:", tutorId);
     rating:
       comments.reduce((sum, c) => sum + (c.rating || 5), 0) /
       (comments.length || 1),
-    bannerUrl: "/api/placeholder/800/200",
+    bannerUrl: "/tutor-bg.jpg",
     avatarUrl: tutorProfile.profile_picture || "/api/placeholder/200/200",
     aboutMe:
       "Soy estudiante de Informática de 2do año. Me dedico a crear agentes de IA con Python y OpenAI. Puedo ayudarte con tu lógica de programación en lenguajes como Python, JavaScript y Node.",
@@ -146,7 +144,6 @@ console.log("tutorId:", tutorId);
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
-      <EditProfileDialog />
       <TutorProfileContainer
         tutorData={tutorData}
         onEditAbout={() => {}}

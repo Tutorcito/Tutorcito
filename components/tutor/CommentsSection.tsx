@@ -12,7 +12,7 @@ interface CommentsSectionProps {
 
 export default function CommentsSection({ comments }: CommentsSectionProps) {
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-3xl">
       <h2 className="text-2xl font-semibold mb-6">Comentarios</h2>
       <div className="space-y-6">
         {comments.map((comment, idx) => (
