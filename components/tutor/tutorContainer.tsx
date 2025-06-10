@@ -26,6 +26,7 @@ export type TutorProfileContainerProps = {
 		}>;
 		comments: Array<{
 			name: string;
+			profilePicture: string;
 			date: string;
 			rating: number;
 			text: string;

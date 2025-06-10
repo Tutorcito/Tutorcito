@@ -1,6 +1,8 @@
-// components/tutor/CommentsSection.tsx
+import Image from "next/image";
+
 interface Comment {
   name: string;
+  profilePicture: string;
   date: string;
   rating: number;
   text: string;
@@ -21,7 +23,20 @@ export default function CommentsSection({ comments }: CommentsSectionProps) {
             className="bg-white p-4 rounded-md shadow-sm mb-4 transition-transform transform hover:scale-105"
           >
             <div className="flex items-center mb-2">
-              <div className="w-10 h-10 rounded-full bg-gray-300 mr-3"></div>
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-300 mr-3 flex-shrink-0">
+                  <Image
+                    src={comment.profilePicture}
+                    alt={`${comment.name} profile picture`}
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback if image fails to load
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/api/placeholder/40/40";
+                    }}
+                  />
+              </div>
               <div>
                 <p className="font-semibold text-lg">{comment.name}</p>
                 <div className="flex items-center">

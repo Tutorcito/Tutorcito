@@ -10,12 +10,13 @@ import { Database } from "@/types/supabase";
 export default function TutorPage() {
   const params = useParams();
   const tutorId = typeof params?.tutorId === "string" ? params.tutorId : "";
+  
   if (!tutorId) {
     return <div className="text-center py-10">Esperando ID del tutor...</div>;
   }
 
   const [comments, setComments] = useState<Database["public"]["Tables"]["tutor_comments"]["Row"][]>([]);
-  const [profilesMap, setProfilesMap] = useState<Record<string, { full_name: string }>>({});
+  const [profilesMap, setProfilesMap] = useState<Record<string, { full_name: string; profile_picture: string | null }>>({});
   const [tutorProfile, setTutorProfile] = useState<Database["public"]["Tables"]["profiles"]["Row"] | null>(null);
   const [loading, setLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
@@ -24,6 +25,7 @@ export default function TutorPage() {
     const fetchTutor = async () => {
       if (!tutorId) return;
       setProfileLoading(true);
+      
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
@@ -48,23 +50,38 @@ export default function TutorPage() {
 
       const { data: commentsData, error } = await supabase
         .from("tutor_comments")
-        .select("*, user_id")
+        .select("*")
         .eq("tutor_id", tutorId)
         .order("created_at", { ascending: false });
 
-      if (error) return console.error(error);
+      if (error) {
+        console.error("Error fetching comments:", error);
+        return;
+      }
+      
       setComments(commentsData || []);
 
-      const userIds = [...new Set((commentsData || []).map((c:any) => c.user_id))];
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("id, full_name")
-        .in("id", userIds);
+      // Fetch user profiles for all comments
+      const userIds = [...new Set((commentsData || []).map((c) => c.user_id))];
+      
+      if (userIds.length > 0) {
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("id, full_name, profile_picture")
+          .in("id", userIds);
 
-      const profileMap = Object.fromEntries(
-        (profileData || []).map((p:any) => [p.id, { full_name: p.full_name }])
-      );
-      setProfilesMap(profileMap);
+        if (profileError) {
+          console.error("Error fetching profiles:", profileError);
+        } else {
+          const profileMap = Object.fromEntries(
+            (profileData || []).map((p) => [p.id, { 
+              full_name: p.full_name,
+              profile_picture: p.profile_picture 
+            }])
+          );
+          setProfilesMap(profileMap);
+        }
+      }
     };
 
     fetchComments();
@@ -72,36 +89,75 @@ export default function TutorPage() {
 
   const handleSubmitComment = async (content: string, rating: number) => {
     setLoading(true);
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    
+    try {
+      // Get current user
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
 
-    if (authError || !user) {
-      alert("Debes estar autenticado para comentar.");
+      if (authError || !user) {
+        alert("Debes estar autenticado para comentar.");
+        setLoading(false);
+        return;
+      }
+
+      // Insert the new comment and return the inserted data
+      const { data: newComment, error: insertError } = await supabase
+        .from("tutor_comments")
+        .insert([
+          {
+            tutor_id: tutorId,
+            user_id: user.id,
+            content,
+            rating,
+          },
+        ])
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error("Error inserting comment:", insertError);
+        alert("Error al enviar comentario");
+        setLoading(false);
+        return;
+      }
+
+      // Get the current user's profile if not already in profilesMap
+      if (!profilesMap[user.id]) {
+        const { data: userProfile, error: profileError } = await supabase
+          .from("profiles")
+          .select("id, full_name, profile_picture")
+          .eq("id", user.id)
+          .single();
+
+        if (profileError) {
+          console.error("Error fetching user profile:", profileError);
+        } else {
+          // Update profilesMap with the new user
+          setProfilesMap(prev => ({
+            ...prev,
+            [user.id]: { 
+              full_name: userProfile.full_name,
+              profile_picture: userProfile.profile_picture 
+            }
+          }));
+        }
+      }
+
+      // Add the new comment to the beginning of the comments array
+      setComments(prev => [newComment, ...prev]);
+
+      // Show success message
+      alert("Comentario enviado exitosamente!");
+
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      alert("Error inesperado al enviar comentario");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const { data, error } = await supabase.from("tutor_comments").insert([
-      {
-        tutor_id: tutorId,
-        user_id: user.id,
-        content,
-        rating,
-      },
-    ]);
-
-    if (error) {
-      alert("Error al enviar comentario");
-      console.error(error);
-    } else {
-      setComments((prev) => [
-        ...(data || []),
-        ...prev,
-      ]);
-    }
-    setLoading(false);
   };
 
   if (profileLoading) {
@@ -113,18 +169,22 @@ export default function TutorPage() {
   }
 
   const formattedComments = comments.map((c) => ({
-    name: profilesMap[c.user_id]?.full_name || "Anon",
+    name: profilesMap[c.user_id]?.full_name || "Usuario Anónimo",
+    profilePicture: profilesMap[c.user_id]?.profile_picture || "/api/placeholder/40/40",
     date: new Date(c.created_at || "").toLocaleDateString(),
     rating: c.rating || 5,
     text: c.content,
   }));
 
+  // Calculate average rating
+  const averageRating = comments.length > 0 
+    ? comments.reduce((sum, c) => sum + (c.rating || 5), 0) / comments.length
+    : 5;
+
   const tutorData = {
     name: tutorProfile.full_name || "Tutor sin nombre",
     specialty: "Laboratorio III | Programación II",
-    rating:
-      comments.reduce((sum, c) => sum + (c.rating || 5), 0) /
-      (comments.length || 1),
+    rating: averageRating,
     bannerUrl: "/tutor-bg.jpg",
     avatarUrl: tutorProfile.profile_picture || "/api/placeholder/200/200",
     aboutMe:
