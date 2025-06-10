@@ -1,10 +1,11 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
 interface resourcesCardProps {
-  icon: any; // Puede ser un import o string
+  icon: any;
   description1: string;
   description2: string;
   description3: string;
@@ -18,44 +19,38 @@ function ResourcesCard({
   description3,
   sitelink,
 }: resourcesCardProps) {
-  const imageSrc =
-    typeof icon === "object" && icon.src ? icon.src : icon;
+  const imageSrc = typeof icon === "object" && icon.src ? icon.src : icon;
 
   return (
-    <Card className="min-w-[260px] max-w-[280px] flex-shrink-0 rounded-lg bg-white p-4 shadow-md">
-      <CardHeader className="p-0 pb-4">
-        <div className="flex items-center justify-center w-full h-10 mb-1">
-          <div className="relative w-full h-full flex items-center justify-center">
-            <img
-              src={imageSrc}
-              alt="Resource Logo"
-              className="max-h-full max-w-full object-contain"
-            />
-          </div>
+    <Card className="w-full max-w-[280px] bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <CardHeader className="p-6 pb-4">
+        <div className="flex items-center justify-center h-12 mb-4">
+          <img
+            src={imageSrc}
+            alt="Resource Logo"
+            className="max-h-12 max-w-full object-contain"
+          />
         </div>
       </CardHeader>
 
-      <CardContent>
-        <ul className="mb-12 space-y-2">
-          <li className="flex items-center">
-            <div className="w-2 h-2 rounded-full bg-blue-500 mr-2" />
-            <span className="text-gray-700">{description1}</span>
-          </li>
-          <li className="flex items-center">
-            <div className="w-2 h-2 rounded-full bg-blue-500 mr-2" />
-            <span className="text-gray-700">{description2}</span>
-          </li>
-          <li className="flex items-center">
-            <div className="w-2 h-2 rounded-full bg-blue-500 mr-2" />
-            <span className="text-gray-700">{description3}</span>
-          </li>
-        </ul>
+      <CardContent className="px-6 pb-6">
+        <div className="space-y-3 mb-8">
+          <div className="flex items-center">
+            <div className="w-2 h-2 rounded-full bg-blue-500 mr-3 flex-shrink-0" />
+            <span className="text-gray-700 text-sm">{description1}</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-2 h-2 rounded-full bg-blue-500 mr-3 flex-shrink-0" />
+            <span className="text-gray-700 text-sm">{description2}</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-2 h-2 rounded-full bg-blue-500 mr-3 flex-shrink-0" />
+            <span className="text-gray-700 text-sm">{description3}</span>
+          </div>
+        </div>
 
-        <Button
-          variant={"default"}
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded font-medium hover:bg-blue-600 transition-colors"
-        >
-          <Link target="_blank" href={sitelink}>
+        <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-md font-medium transition-colors">
+          <Link target="_blank" href={sitelink} className="block w-full">
             ir al sitio
           </Link>
         </Button>
