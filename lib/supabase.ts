@@ -20,7 +20,7 @@ export type Profile = {
     phone_number: string | null;
     calendly_link: string | null;
     about_me: string | null;
-    prices: PriceOption | null;
+    prices: PriceOption[] | null;
     created_at: string | null;
 };
 

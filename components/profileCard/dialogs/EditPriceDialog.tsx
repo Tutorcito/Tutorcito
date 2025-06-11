@@ -122,6 +122,7 @@ const EditPricesDialog: React.FC<EditPricesDialogProps> = ({
 									onChange={(e) =>
 										updatePriceOption(index, "price", e.target.value)
 									}
+                                    className="mt-2"
 								/>
 							</div>
 
@@ -136,6 +137,7 @@ const EditPricesDialog: React.FC<EditPricesDialogProps> = ({
 									onChange={(e) =>
 										updatePriceOption(index, "duration", e.target.value)
 									}
+                                    className="mt-2"
 								/>
 							</div>
 
