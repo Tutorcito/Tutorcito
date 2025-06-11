@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -44,6 +44,11 @@ const EditKnowledgeDialog: React.FC<EditKnowledgeDialogProps> = ({
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const { success, error } = useToast();
 
+	// Sync local state with currentFiles when they change
+	useEffect(() => {
+		setFiles(currentFiles);
+	}, [currentFiles]);
+
 	const handleFileUpload = async (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
@@ -68,8 +73,8 @@ const EditKnowledgeDialog: React.FC<EditKnowledgeDialogProps> = ({
 			return;
 		}
 
-		const tempId = `temp-${uuidv4()}`;
-		setUploadingFile(tempId);
+		const fileId = uuidv4();
+		setUploadingFile(fileId);
 
 		try {
 			// Clean filename
@@ -93,16 +98,33 @@ const EditKnowledgeDialog: React.FC<EditKnowledgeDialogProps> = ({
 				.from("tutor-validation-files")
 				.getPublicUrl(filePath);
 
-			// Add to local state (will be saved when user clicks "Guardar")
+			// Create new file object
 			const newFile: TutorFile = {
-				id: tempId,
+				id: fileId,
 				tutor_id: userId,
 				file_url: data.publicUrl,
 				description: selectedFile.name.replace(/\.[^/.]+$/, ""), // Remove extension for default description
 			};
 
-			setFiles((prev) => [...prev, newFile]);
-			success("Archivo subido correctamente");
+			// Save to database immediately
+			const { error: insertError } = await supabase
+				.from("tutor_files")
+				.insert([newFile]);
+
+			if (insertError) {
+				// If database insert fails, clean up the uploaded file
+				await supabase.storage
+					.from("tutor-validation-files")
+					.remove([filePath]);
+				throw insertError;
+			}
+
+			// Update local state and parent component
+			const updatedFiles = [...files, newFile];
+			setFiles(updatedFiles);
+			onUpdate(updatedFiles);
+
+			success("Archivo subido y guardado correctamente");
 		} catch (err) {
 			console.error("Error uploading file:", err);
 			error("Error al subir el archivo");
@@ -116,16 +138,29 @@ const EditKnowledgeDialog: React.FC<EditKnowledgeDialogProps> = ({
 
 	const removeFile = async (fileId: string, fileUrl: string) => {
 		try {
-			// Extract file path from URL for deletion from storage
+			// Delete from database first
+			const { error: deleteError } = await supabase
+				.from("tutor_files")
+				.delete()
+				.eq("id", fileId);
+
+			if (deleteError) {
+				throw deleteError;
+			}
+
+			// Delete from storage
 			const urlParts = fileUrl.split("/");
 			const fileName = urlParts[urlParts.length - 1];
 			const filePath = `${userId}/${fileName}`;
 
-			// Delete from storage
 			await supabase.storage.from("tutor-validation-files").remove([filePath]);
 
-			// Remove from local state
-			setFiles((prev) => prev.filter((file) => file.id !== fileId));
+			// Update local state and parent component
+			const updatedFiles = files.filter((file) => file.id !== fileId);
+			setFiles(updatedFiles);
+			onUpdate(updatedFiles);
+
+			success("Archivo eliminado correctamente");
 		} catch (err) {
 			console.error("Error removing file:", err);
 			error("Error al eliminar el archivo");
@@ -142,39 +177,35 @@ const EditKnowledgeDialog: React.FC<EditKnowledgeDialogProps> = ({
 		setIsLoading(true);
 
 		try {
-			// First, delete existing files from database
-			await supabase.from("tutor_files").delete().eq("tutor_id", userId);
+			// Only update descriptions for existing files
+			for (const file of files) {
+				const originalFile = currentFiles.find((f) => f.id === file.id);
+				if (originalFile && originalFile.description !== file.description) {
+					const { error: updateError } = await supabase
+						.from("tutor_files")
+						.update({ description: file.description })
+						.eq("id", file.id);
 
-			// Insert new files
-			if (files.length > 0) {
-				const filesToInsert = files.map((file) => ({
-					id: file.id.startsWith("temp-") ? uuidv4() : file.id, // Generate new ID for temp files
-					tutor_id: userId,
-					file_url: file.file_url,
-					description: file.description,
-				}));
-
-				const { error: insertError } = await supabase
-					.from("tutor_files")
-					.insert(filesToInsert);
-
-				if (insertError) {
-					throw insertError;
+					if (updateError) {
+						throw updateError;
+					}
 				}
 			}
 
+			// Update parent component with final state
 			onUpdate(files);
-			success("Documentos actualizados correctamente");
+			success("Descripciones actualizadas correctamente");
 			onClose();
 		} catch (err) {
-			console.error("Error saving files:", err);
-			error("Error al guardar los documentos");
+			console.error("Error updating descriptions:", err);
+			error("Error al actualizar las descripciones");
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
 	const handleCancel = () => {
+		// Reset descriptions to original values
 		setFiles(currentFiles);
 		onClose();
 	};
@@ -185,7 +216,8 @@ const EditKnowledgeDialog: React.FC<EditKnowledgeDialogProps> = ({
 				<DialogHeader>
 					<DialogTitle>Editar Documentos de Validación</DialogTitle>
 					<DialogDescription>
-						Gestiona los documentos que validan tus conocimientos y experiencia.
+						Los archivos se guardan automáticamente al subirlos. Solo necesitas
+						guardar los cambios en las descripciones.
 					</DialogDescription>
 				</DialogHeader>
 
@@ -210,6 +242,9 @@ const EditKnowledgeDialog: React.FC<EditKnowledgeDialogProps> = ({
 							</Button>
 							<p className="text-sm text-gray-500 mt-2">
 								PDF, JPG, PNG (máx. 5MB)
+							</p>
+							<p className="text-xs text-blue-600 mt-1">
+								Los archivos se guardan automáticamente
 							</p>
 						</div>
 					</div>
@@ -250,6 +285,7 @@ const EditKnowledgeDialog: React.FC<EditKnowledgeDialogProps> = ({
 									size="icon"
 									onClick={() => removeFile(file.id, file.file_url)}
 									className="text-red-600 hover:text-red-700"
+									disabled={uploadingFile !== null}
 								>
 									<Trash2 className="h-4 w-4" />
 								</Button>
@@ -279,7 +315,7 @@ const EditKnowledgeDialog: React.FC<EditKnowledgeDialogProps> = ({
 						Cancelar
 					</Button>
 					<Button onClick={handleSave} disabled={isLoading}>
-						{isLoading ? "Guardando..." : "Guardar"}
+						{isLoading ? "Guardando descripciones..." : "Guardar descripciones"}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
