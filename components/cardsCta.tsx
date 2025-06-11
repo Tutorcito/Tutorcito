@@ -1,4 +1,7 @@
-import React from "react";
+'use client';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import {
   Card,
   CardContent,
@@ -22,6 +25,74 @@ const subscriptionItems: PaymentItem[] = [
 
 
 const CardsCta = () => {
+  const router = useRouter();
+  const [user, setUser] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Obtener usuario y perfil
+  const getUserAndProfile = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    setUser(user);
+
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+      
+      setUserProfile(profile);
+    }
+  };
+
+  useEffect(() => {
+    getUserAndProfile();
+  }, []);
+
+  const handleBecomeTeacher = async () => {
+    setIsLoading(true);
+
+    try {
+      if (!user) {
+        // Usuario no logueado - ir al paso 1
+        router.push('/auth/onboarding/step1');
+        return;
+      }
+
+      // Usuario logueado - verificar su perfil y estado
+      if (!userProfile) {
+        // Si no tiene perfil, ir al paso 1 para configurarlo
+        router.push('/auth/onboarding/step1');
+        return;
+      }
+
+      // Verificar si el usuario ya es tutor o ambos
+      if (userProfile.role === 'tutor' || userProfile.role === 'ambos') {
+        // Verificar si ya completó el paso 2 (datos personales)
+        if (userProfile.full_name && userProfile.degree && userProfile.year_in_degree) {
+          // Ya tiene los datos básicos, ir directamente al paso 3 (carga de archivos)
+          router.push('/auth/onboarding/step3');
+        } else {
+          // Falta completar datos del paso 2
+          router.push('/auth/onboarding/step2');
+        }
+      } else if (userProfile.role === 'estudiante') {
+        // Es estudiante, necesita cambiar su rol - ir al paso 1
+        router.push('/auth/onboarding/step1');
+      } else {
+        // Rol no definido o incompleto - ir al paso 1
+        router.push('/auth/onboarding/step1');
+      }
+    } catch (error) {
+      console.error('Error al verificar usuario:', error);
+      // En caso de error, ir al paso 1
+      router.push('/auth/onboarding/step1');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 px-4 sm:px-80 py-10 mb-32 place-items-center">
       {/* CARD 1 */}
@@ -48,8 +119,12 @@ const CardsCta = () => {
           </ul>
         </CardContent>
         <CardFooter className="mt-auto">
-          <button className="w-full bg-[#0077B6] text-white py-3 px-4 rounded font-medium hover:bg-blue-700 transition-colors">
-            ¡Quiero ser tutor!
+          <button 
+            className="w-full bg-[#0077B6] text-white py-3 px-4 rounded font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleBecomeTeacher}
+            disabled={isLoading}
+          >
+            {isLoading ? "Verificando..." : "¡Quiero ser tutor!"}
           </button>
         </CardFooter>
       </Card>
