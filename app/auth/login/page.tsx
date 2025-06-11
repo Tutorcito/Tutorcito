@@ -218,19 +218,15 @@ export default function Login() {
                 </div>
             </div>
             {/* Lado derecho - Imagen */}
-            <div className="hidden lg:block lg:w-1/2 relative bg-gray-100">
-                <div className="absolute inset-0">
-                    <Image
-                        src={"/onboarding.jpg"}
-                        alt="Students having a tutoring session together."
-                        fill
-                        className="object-cover object-center"
-                        priority
-                        sizes="50vw"
-                    />
-                    {/* Overlay para mejor contraste si es necesario */}
-                    <div className="absolute inset-0 bg-black bg-opacity-10"></div>
-                </div>
+            <div className="hidden lg:block lg:w-1/2 relative">
+                <Image
+                    src="/onboarding.jpg"
+                    alt="Students having a tutoring session together."
+                    fill
+                    className="object-cover object-center"
+                    priority
+                    sizes="50vw"
+                />
             </div>
         </div>
     );
