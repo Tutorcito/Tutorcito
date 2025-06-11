@@ -40,17 +40,16 @@ const ProfileCardContainer: React.FC = () => {
   ];
 
   return (
-    <div className="flex justify-center items-start min-h-screen p-4 bg-gray-100">
-      <div className="w-full max-w-2xl bg-white rounded-xl shadow-xl overflow-hidden flex flex-col gap-4 pb-10">
+    <div className="flex justify-center items-start min-h-screen">
+      <div className="w-full max-w-2xl bg-white rounded-xl shadow-xl overflow-hidden flex flex-col gap-4 pb-10 p-4">
         <ProfileBanner bannerUrl="" avatarUrl={userData.profile_picture ?? ""} />
         <ProfileHeader
           name={userData.full_name ?? "Sin nombre"}
           title={userData.degree ?? ""}
-          year={userData.year_in_degree?.toString() ?? ""}
         />
         <AboutMe content={userData.role ?? "Aquí va la descripción si está en la base de datos."} />
         <PricingSection prices={prices} />
-        <KnowledgeSection knowledge={knowledge} />
+        {/* <KnowledgeSection knowledge={knowledge} /> */}
         <div className="mt-4 px-4">
           <ProfileActions />
         </div>

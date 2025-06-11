@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react'
 
 type ProfileBannerProps = {
@@ -9,10 +10,15 @@ const ProfileBanner: React.FC<ProfileBannerProps> = ({ bannerUrl, avatarUrl }) =
     return (
         <div className="relative w-full">
             {/* Banner */}
-            <div
+            <Image
+                src={'/tutor-bg.jpg'}
+                height={48}
+                width={48}
+                alt='Abstract profile banner'
                 className={`
                     h-24 sm:h-32 md:h-40 lg:h-48 xl:h-52
                     w-full
+                    rounded-t-lg
                     bg-blue-600 bg-cover bg-center bg-no-repeat
                     transition-all duration-300 ease-in-out
                     ${bannerUrl ? 'bg-blue-600' : 'bg-gradient-to-r from-blue-500 to-blue-700'}

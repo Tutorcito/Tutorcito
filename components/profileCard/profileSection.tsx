@@ -20,6 +20,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
     <div className={`${containerClassName} 
                      p-3 sm:p-4 md:p-5 lg:p-6
                      rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl
+                     min-h-48
                      relative
                      transition-all duration-200 ease-in-out
                      hover:shadow-lg sm:hover:shadow-xl md:hover:shadow-2xl`}>

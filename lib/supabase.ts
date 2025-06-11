@@ -5,6 +5,11 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+export type PriceOption = {
+    price: string;
+    duration: string;
+};
+
 export type Profile = {
     id: string;
     full_name: string | null;
@@ -14,6 +19,8 @@ export type Profile = {
     year_in_degree: number | null;
     phone_number: string | null;
     calendly_link: string | null;
+    about_me: string | null;
+    prices: PriceOption | null;
     created_at: string | null;
 };
 

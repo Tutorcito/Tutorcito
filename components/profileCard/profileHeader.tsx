@@ -3,10 +3,9 @@ import React from 'react'
 type ProfileHeaderProps = {
     name: string;
     title: string;
-    year: string;
 };
 
-const ProfileHeader: React.FC<ProfileHeaderProps> = ({ name, title, year }) => {
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ name, title }) => {
     return (
         <div className="pt-12 sm:pt-16 md:pt-20 lg:pt-24 xl:pt-28
                        pb-3 sm:pb-4 md:pb-5 lg:pb-6
@@ -29,13 +28,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ name, title, year }) => {
                          break-words
                          max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto">
                 {title}
-            </p>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg
-                         text-gray-500 sm:text-gray-600
-                         font-normal sm:font-medium
-                         leading-relaxed
-                         break-words">
-                {year}
             </p>
         </div>
     )
