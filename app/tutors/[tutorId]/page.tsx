@@ -3,13 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import TutorProfileContainer from "@/components/tutor/tutorContainer";
-import { EditProfileDialog } from "@/components/EditProfileDialog";
 import { useParams } from "next/navigation";
 import { Database } from "@/types/supabase";
+import { useToast } from "@/hooks/useToast";
 
 export default function TutorPage() {
   const params = useParams();
   const tutorId = typeof params?.tutorId === "string" ? params.tutorId : "";
+  const { success, error } = useToast();
   
   if (!tutorId) {
     return <div className="text-center py-10">Esperando ID del tutor...</div>;
@@ -19,12 +20,35 @@ export default function TutorPage() {
   const [profilesMap, setProfilesMap] = useState<Record<string, { full_name: string; profile_picture: string | null }>>({});
   const [tutorProfile, setTutorProfile] = useState<Database["public"]["Tables"]["profiles"]["Row"] | null>(null);
   const [loading, setLoading] = useState(false);
-  const [profileLoading, setProfileLoading] = useState(true);
+	// Add this helper function for real-time moderation feedback
+	const checkContentInRealTime = async (text: string) => {
+		if (text.length < 10) return; // Don't check very short text
+		
+		try {
+			const response = await fetch('/api/moderate', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ text }),
+			});
+			
+			if (response.ok) {
+				const { result } = await response.json();
+				if (result.isOffensive && result.confidence > 0.7) {
+					// Could show a warning to the user
+					console.warn('Potentially offensive content detected');
+				}
+			}
+		} catch (error) {
+			console.error('Real-time moderation error:', error);
+		}
+	};
 
   useEffect(() => {
     const fetchTutor = async () => {
       if (!tutorId) return;
-      setProfileLoading(true);
+      setLoading(true);
       
       const { data, error } = await supabase
         .from("profiles")
@@ -38,7 +62,7 @@ export default function TutorPage() {
       } else {
         setTutorProfile(data);
       }
-      setProfileLoading(false);
+      setLoading(false);
     };
 
     fetchTutor();
@@ -91,14 +115,36 @@ export default function TutorPage() {
     setLoading(true);
     
     try {
-      // Get current user
+      // Step 1: Moderate content using OpenAI API
+      const moderationResponse = await fetch('/api/moderate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: content }),
+      });
+
+      if (!moderationResponse.ok) {
+        throw new Error('Error moderating content');
+      }
+
+      const { result: moderationResult } = await moderationResponse.json();
+
+      // Step 2: Check if content is flagged
+      if (moderationResult.flagged) {
+        error("Tu comentario contiene contenido inapropiado y no puede ser publicado. Por favor, mantené un lenguaje respetuoso.");
+        setLoading(false);
+        return;
+      }
+
+      // Step 3: Get current user
       const {
         data: { user },
         error: authError,
       } = await supabase.auth.getUser();
 
       if (authError || !user) {
-        alert("Debes estar autenticado para comentar.");
+        error("Debes estar autenticado para comentar.");
         setLoading(false);
         return;
       }
@@ -110,7 +156,7 @@ export default function TutorPage() {
           {
             tutor_id: tutorId,
             user_id: user.id,
-            content,
+            content: content, // Use original content since it passed moderation
             rating,
           },
         ])
@@ -119,7 +165,7 @@ export default function TutorPage() {
 
       if (insertError) {
         console.error("Error inserting comment:", insertError);
-        alert("Error al enviar comentario");
+        error("Error al enviar comentario");
         setLoading(false);
         return;
       }
@@ -150,17 +196,17 @@ export default function TutorPage() {
       setComments(prev => [newComment, ...prev]);
 
       // Show success message
-      alert("Comentario enviado exitosamente!");
+      success("¡Comentario enviado exitosamente!");
 
-    } catch (error) {
-      console.error("Unexpected error:", error);
-      alert("Error inesperado al enviar comentario");
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      error("Error inesperado al enviar comentario");
     } finally {
       setLoading(false);
     }
   };
 
-  if (profileLoading) {
+  if (loading) {
     return <div className="text-center py-10">Cargando perfil del tutor...</div>;
   }
 

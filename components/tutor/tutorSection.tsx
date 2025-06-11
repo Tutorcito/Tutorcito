@@ -27,7 +27,6 @@ export const TutorSection: React.FC<TutorSectionProps> = ({
           className="absolute top-3 right-3 p-1 text-gray-600 hover:text-gray-800 transition-colors"
           onClick={onEdit}
         >
-          <Pencil size={16} />
         </button>
       )}
     </div>

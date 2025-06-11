@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/hooks/useToast";
 import {
   Card,
   CardContent,
@@ -29,6 +30,7 @@ const CardsCta = () => {
   const [user, setUser] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { info } = useToast();
 
   // Obtener usuario y perfil
   const getUserAndProfile = async () => {
@@ -56,7 +58,7 @@ const CardsCta = () => {
     try {
       if (!user) {
         // Usuario no logueado - ir al paso 1
-        router.push('/auth/onboarding/step1');
+        router.push('/auth/login');
         return;
       }
 
@@ -69,13 +71,10 @@ const CardsCta = () => {
 
       // Verificar si el usuario ya es tutor o ambos
       if (userProfile.role === 'tutor' || userProfile.role === 'ambos') {
-        // Verificar si ya completó el paso 2 (datos personales)
-        if (userProfile.full_name && userProfile.degree && userProfile.year_in_degree) {
-          // Ya tiene los datos básicos, ir directamente al paso 3 (carga de archivos)
-          router.push('/auth/onboarding/step3');
-        } else {
-          // Falta completar datos del paso 2
-          router.push('/auth/onboarding/step2');
+        if (userProfile.role === 'tutor') {
+          info("¡Ya sos tutor! Podés empezar a recibir estudiantes o configurar tu perfil.");
+        } else if (userProfile.role === 'ambos') {
+          info("¡Ya tenés el rol de tutor activado! Podés empezar a recibir estudiantes.");
         }
       } else if (userProfile.role === 'estudiante') {
         // Es estudiante, necesita cambiar su rol - ir al paso 1
@@ -87,7 +86,7 @@ const CardsCta = () => {
     } catch (error) {
       console.error('Error al verificar usuario:', error);
       // En caso de error, ir al paso 1
-      router.push('/auth/onboarding/step1');
+      router.push('/auth/login');
     } finally {
       setIsLoading(false);
     }

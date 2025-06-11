@@ -11,18 +11,18 @@ const Profile = () => {
     const { id } = useParams();
 
     //Users can only access their own profiles.
-    const checkAccess = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
+    // const checkAccess = async () => {
+    //     const { data: { user } } = await supabase.auth.getUser();
 
-        if (!user || user.id === id) {
-            router.replace("/");
-        };
-    };
+    //     if (!user || user.id === id) {
+    //         router.replace("/");
+    //     };
+    // };
     
     //Always is checking for changes in the search query.
-    useEffect(() => {
-        checkAccess();
-    }, [id, router]);
+    // useEffect(() => {
+    //     checkAccess();
+    // }, [id, router]);
 
     return (
         <div className="flex flex-col items-center justify-center p-12">

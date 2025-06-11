@@ -1,10 +1,10 @@
-// ✅ app/layout.client.tsx
 "use client";
 
 import { usePathname } from "next/navigation";
 import { AuthProvider } from "@/context/AuthContext";
 import NavBar from "@/components/navBar";
 import Footer from "@/components/footer";
+import { Toaster } from "sonner";
 
 export default function RootLayoutClient({
 	children,
@@ -19,6 +19,12 @@ export default function RootLayoutClient({
 			{!isOnboarding && <NavBar />}
 			{children}
 			{!isOnboarding && <Footer />}
+			<Toaster
+				position="top-center"
+				expand={true}
+				richColors
+				closeButton
+			/>
 		</AuthProvider>
 	);
 }
