@@ -1,46 +1,31 @@
-import React from 'react'
-import { ProfileSection } from "./profileSection";
+import React from "react";
 
 type KnowledgeItem = {
-    icon: string;
-    label: string;
-  };
-  
-  type KnowledgeSectionProps = {
-    items: KnowledgeItem[];
-    onEdit?: () => void;
-  };
+  icon: string;
+  label: string;
+};
 
-const KnowledgeSection: React.FC<KnowledgeSectionProps> = ({ items, onEdit }) => {
+type KnowledgeSectionProps = {
+  knowledge: KnowledgeItem[];
+};
+
+const KnowledgeSection: React.FC<KnowledgeSectionProps> = ({ knowledge }) => {
   return (
-    <ProfileSection 
-      title="Mis conocimientos" 
-      onEdit={onEdit}
-      titleClassName="text-sm sm:text-base md:text-lg font-medium mb-2 sm:mb-3"
-    >
-      <div className="flex flex-wrap gap-1.5 sm:gap-2 md:gap-3 lg:gap-2.5">
-        {items.map((item, index) => (
-          <div 
-            key={index}
-            className="flex items-center bg-white border border-gray-300 rounded-md 
-                       px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2
-                       text-xs sm:text-sm md:text-base
-                       transition-all duration-200 ease-in-out
-                       hover:shadow-sm hover:border-gray-400
-                       min-h-[2rem] sm:min-h-[2.25rem] md:min-h-[2.5rem]
-                       max-w-full break-words"
+    <div className="bg-gray-100 rounded-lg p-4 mt-4">
+      <h2 className="text-lg font-semibold mb-2">Mis conocimientos</h2>
+      <div className="flex flex-wrap gap-2">
+        {knowledge.map((item, idx) => (
+          <span
+            key={idx}
+            className="bg-white border rounded-full px-3 py-1 text-sm flex items-center gap-1"
           >
-            <span className="mr-1.5 sm:mr-2 md:mr-2.5 text-sm sm:text-base md:text-lg flex-shrink-0">
-              {item.icon}
-            </span>
-            <span className="leading-tight sm:leading-normal truncate sm:whitespace-normal">
-              {item.label}
-            </span>
-          </div>
+            <span>{item.icon}</span>
+            <span>{item.label}</span>
+          </span>
         ))}
       </div>
-    </ProfileSection>
-  )
-}
+    </div>
+  );
+};
 
-export default KnowledgeSection
+export default KnowledgeSection;
