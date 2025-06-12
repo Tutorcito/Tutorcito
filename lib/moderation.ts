@@ -1,4 +1,3 @@
-// lib/moderation.ts
 export interface ModerationResult {
 	flagged: boolean;
 	categories: {

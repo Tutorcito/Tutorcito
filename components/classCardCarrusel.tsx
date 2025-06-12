@@ -33,13 +33,7 @@ const ClassCardCarousel = ({ classes, title = "Materias Disponibles", onSubjectS
         </h2>
       )}
 
-      <Carousel
-        opts={{
-          align: "start",
-          loop: true,
-        }}
-        className="w-full"
-      >
+      <Carousel opts={{ align: "start", loop: true }} className="w-full">
         <CarouselContent className="-ml-2 md:-ml-4">
           {classes.map((classItem) => (
             <CarouselItem 
@@ -56,7 +50,6 @@ const ClassCardCarousel = ({ classes, title = "Materias Disponibles", onSubjectS
             </CarouselItem>
           ))}
         </CarouselContent>
-
         <CarouselPrevious className="hidden sm:flex" />
         <CarouselNext className="hidden sm:flex" />
       </Carousel>

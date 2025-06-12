@@ -207,7 +207,7 @@ export default function Home() {
                   ))
                 ) : (
                   <div className="p-4 text-center text-gray-500">
-                    No se encontraron resu
+                    No se encontraron resultados.
                   </div>
                 )}
               </div>
