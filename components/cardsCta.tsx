@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import PaymentButton from "./paymentButton";
 import type { PaymentItem } from "./paymentButton";
+import { useToast } from "@/hooks/useToast";
 
 const subscriptionItems: PaymentItem[] = [
   {
@@ -29,6 +30,7 @@ const CardsCta = () => {
   const [user, setUser] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { info } = useToast();
 
   // Obtener usuario y perfil
   const getUserAndProfile = async () => {
@@ -69,14 +71,7 @@ const CardsCta = () => {
 
       // Verificar si el usuario ya es tutor o ambos
       if (userProfile.role === 'tutor' || userProfile.role === 'ambos') {
-        // Verificar si ya completó el paso 2 (datos personales)
-        if (userProfile.full_name && userProfile.degree && userProfile.year_in_degree) {
-          // Ya tiene los datos básicos, ir directamente al paso 3 (carga de archivos)
-          router.push('/auth/onboarding/step3');
-        } else {
-          // Falta completar datos del paso 2
-          router.push('/auth/onboarding/step2');
-        }
+        info("¡Ya sos tutor! Podés empezar a recibir estudiantes.")
       } else if (userProfile.role === 'estudiante') {
         // Es estudiante, necesita cambiar su rol - ir al paso 1
         router.push('/auth/onboarding/step1');
@@ -130,7 +125,7 @@ const CardsCta = () => {
   </Card>
 
   {/* CARD 2 */}
-  <Card className="w-full max-w-sm h-full h-[400px] rounded-lg shadow-md shadow-blue-200 overflow-hidden bg-[#0077B6] text-white border-transparent lg:mx-4 flex flex-col">
+  <Card className="w-full max-w-sm h-[400px] rounded-lg shadow-md shadow-blue-200 overflow-hidden bg-[#0077B6] text-white border-transparent lg:mx-4 flex flex-col">
     <CardHeader className="pb-0">
       <CardTitle className="text-center text-xl">
         ¿Ya sos tutor y querés llegar a más estudiantes?
