@@ -251,7 +251,7 @@ export default function CheckoutPage() {
 			} finally {
 				setProcessingPayment(false);
 			}
-		}; 
+	}; 
 
 	if (loading) {
 		return (

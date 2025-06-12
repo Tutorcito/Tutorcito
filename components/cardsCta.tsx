@@ -13,6 +13,7 @@ import {
 import PaymentButton from "./paymentButton";
 import type { PaymentItem } from "./paymentButton";
 import { useToast } from "@/hooks/useToast";
+import { Button } from "./ui/button";
 
 const subscriptionItems: PaymentItem[] = [
   {
@@ -58,7 +59,7 @@ const CardsCta = () => {
     try {
       if (!user) {
         // Usuario no logueado - ir al paso 1
-        router.push('/auth/onboarding/step1');
+        router.push('/auth/login');
         return;
       }
 
@@ -88,6 +89,21 @@ const CardsCta = () => {
     }
   };
 
+  const handleUpgradeSubscription = () => {
+    if (!user) {
+      router.push('/auth/login');
+      return;
+    }
+
+    // Verificar si el usuario es tutor
+    if (userProfile && (userProfile.role === 'tutor' || userProfile.role === 'ambos')) {
+      router.push('/checkout/subscription');
+    } else {
+      info("Primero necesitas ser tutor para acceder al plan premium. ¡Únete como tutor!");
+      handleBecomeTeacher();
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-20 p-4 sm:px-80 py-10 mb-32 place-items-center">
   {/* CARD 1 */}
@@ -114,13 +130,13 @@ const CardsCta = () => {
       </ul>
     </CardContent>
     <CardFooter className="mt-auto">
-      <button 
-        className="w-full bg-[#0077B6] text-white py-3 px-4 rounded font-medium hover:bg-blue-900 transition-transform duration-300 hover:scale-105"
+      <Button 
+        className="w-full bg-[#0077B6] text-white py-3 h-12 px-4 rounded font-medium hover:bg-blue-900 transition-transform duration-300 hover:scale-105"
         onClick={handleBecomeTeacher}
         disabled={isLoading}
       >
         {isLoading ? "Verificando..." : "¡Quiero ser tutor!"}
-      </button>
+      </Button>
     </CardFooter>
   </Card>
 
@@ -151,18 +167,12 @@ const CardsCta = () => {
       </ul>
     </CardContent>
     <CardFooter className="mt-auto">
-      <PaymentButton 
-        items={subscriptionItems}
-        accessToken="TU_ACCESS_TOKEN_AQUI"
-        className="w-full px-4 py-3 text-white bg-black hover:bg-gray-900 text-sm rounded-lg"
-        onSuccess={() => console.log('Redirigido')}
-        onError={(e: string) => console.log(e)} 
-        backUrls={{
-          success: "http://localhost:3000",
-          failure: "http://localhost:3000",
-          pending: "http://localhost:3000"
-        }}
-      />
+      <Button
+        onClick={handleUpgradeSubscription}
+        className="w-full px-4 py-3 h-12 text-white bg-black hover:bg-gray-900 text-sm rounded-lg font-medium transition-transform duration-300 hover:scale-105"
+      >
+        Ser tutor patrocinado
+      </Button>
     </CardFooter>
   </Card>
 </div>
