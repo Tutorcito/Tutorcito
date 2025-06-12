@@ -10,6 +10,7 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useRouter } from "next/navigation";
 
 interface Tutor {
 	id: string;
@@ -21,6 +22,7 @@ interface Tutor {
 
 const SponsoredCarousel = () => {
 	const [tutors, setTutors] = useState<Tutor[]>([]);
+	const router = useRouter();
 
 	useEffect(() => {
         const fetchTutors = async () => {
@@ -32,6 +34,10 @@ const SponsoredCarousel = () => {
 	}, []);
 
 	if (!tutors.length) return null;
+
+	const redirect = (tutorId: string) => {
+		router.push(`/tutors/${tutorId}`);
+	};
 
 	return (
 		<div className="w-full max-w-7xl mx-auto px-4 py-10">
@@ -56,10 +62,12 @@ const SponsoredCarousel = () => {
 							className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
 						>
 							<TutorCard
+								id={tutor.id}
 								name={tutor.full_name}
 								profileImage={tutor.profile_picture}
 								subjects={tutor.subjects}
 								rating={tutor.rating}
+								onClick={() => {redirect(tutor.id)}}
 							/>
 						</CarouselItem>
 					))}

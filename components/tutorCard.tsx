@@ -2,17 +2,43 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Star } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface TutorCardProps {
+  id?: string; // Add id prop
   name: string;
   profileImage: string;
   subjects: string;
-  rating?: number; // Calificación de 1 a 5
+  rating?: number;
+  onClick?: (tutorId: string) => void; // Optional custom click handler
 }
 
-const TutorCard = ({ name, profileImage, subjects, rating = 5 }: TutorCardProps) => {
+const TutorCard = ({ 
+  id,
+  name, 
+  profileImage, 
+  subjects, 
+  rating = 5,
+  onClick 
+}: TutorCardProps) => {
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    if (!id) return;
+    
+    if (onClick) {
+      onClick(id);
+    } else {
+      // Default behavior: navigate to tutor profile
+      router.push(`/tutors/${id}`);
+    }
+  };
+
   return (
-    <Card className="relative overflow-hidden bg-white shadow-sm border border-gray-200 max-w-sm">
+    <Card 
+      className={`relative overflow-hidden bg-white shadow-sm border border-gray-200 max-w-sm transition-all duration-300 hover:shadow-lg   ${id ? 'cursor-pointer' : ''}`}
+      onClick={handleCardClick}
+    >
       {/* Background decorativo */}
       <div className="absolute top-0 left-0 right-0 h-22 bg-gradient-to-br from-blue-100 to-blue-300 opacity-60"></div>
       
@@ -31,7 +57,7 @@ const TutorCard = ({ name, profileImage, subjects, rating = 5 }: TutorCardProps)
         </div>
         
         {/* Nombre */}
-        <CardTitle className="text-xl font-semibold text-gray-800 mb-2">
+        <CardTitle className="text-xl font-semibold text-gray-800 mb-2 hover:text-blue-600 transition-colors">
           {name}
         </CardTitle>
         
@@ -54,6 +80,15 @@ const TutorCard = ({ name, profileImage, subjects, rating = 5 }: TutorCardProps)
           ))}
         </div>
       </CardHeader>
+      
+      {/* Add click indicator */}
+      {id && (
+        <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="text-blue-600 text-xs font-medium">
+            Ver perfil →
+          </div>
+        </div>
+      )}
     </Card>
   );
 };
