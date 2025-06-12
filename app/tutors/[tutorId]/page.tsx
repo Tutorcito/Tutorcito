@@ -3,14 +3,16 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import TutorProfileContainer from "@/components/tutor/tutorContainer";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Database } from "@/types/supabase";
 import { useToast } from "@/hooks/useToast";
+
 
 export default function TutorPage() {
   const params = useParams();
   const tutorId = typeof params?.tutorId === "string" ? params.tutorId : "";
   const { success, error } = useToast();
+  const router = useRouter();
   
   if (!tutorId) {
     return <div className="text-center py-10">Esperando ID del tutor...</div>;
@@ -248,6 +250,10 @@ export default function TutorPage() {
     comments: formattedComments,
   };
 
+  const handleSchedulingTutoring = () => {
+    router.push(`/checkout/class/${tutorId}`)
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <TutorProfileContainer
@@ -256,6 +262,7 @@ export default function TutorPage() {
         onEditKnowledge={() => {}}
         onEditPrices={() => {}}
         onSubmitComment={handleSubmitComment}
+        handleSchedulingTutoring={handleSchedulingTutoring}
         submitting={loading}
       />
     </div>

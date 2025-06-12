@@ -7,6 +7,8 @@ import KnowledgeTutorCard from "./knowledgeTutorCard";
 import PriceCard from "./tutorPriceCard";
 import CommentsSection from "./CommentsSection";
 import CommentForm from "./CommentForm";
+import { Button } from "../ui/button";
+import { Calendar } from "lucide-react";
 
 export type TutorProfileContainerProps = {
 	tutorData: {
@@ -37,6 +39,7 @@ export type TutorProfileContainerProps = {
 	onEditPrices?: () => void;
 	onSubmitComment?: (comment: string, rating: number) => Promise<void>;
 	submitting?: boolean;
+	handleSchedulingTutoring: () => void;
 };
 
 const TutorProfileContainer: React.FC<TutorProfileContainerProps> = ({
@@ -46,6 +49,7 @@ const TutorProfileContainer: React.FC<TutorProfileContainerProps> = ({
 	onEditPrices,
 	onSubmitComment,
 	submitting = false,
+	handleSchedulingTutoring,
 }) => {
 	return (
 		<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,9 +78,13 @@ const TutorProfileContainer: React.FC<TutorProfileContainerProps> = ({
 								<span className="text-yellow-400">★</span>
 							</div>
 						)}
-						<button className="bg-blue-500 text-white px-6 py-2 rounded-md mt-3 hover:bg-blue-800 mb-10">
-							Agendar tutoría
-						</button>
+						<Button
+							onClick={handleSchedulingTutoring}
+							className="bg-blue-500 text-white px-6 py-2 rounded-md mt-3 hover:bg-blue-600 mb-10"
+						>
+							<Calendar className="mr-2 h-4 w-4" />
+							Agendar Tutoría
+						</Button>
 					</div>
 				</div>
 			</div>
