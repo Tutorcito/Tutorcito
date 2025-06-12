@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Input } from "@/components/ui/input";
 import FilterDialog from "@/components/FilterDialog";
+import ClassCardCarrusel from "@/components/classCardCarrusel";
 const tutorsData = [
 	{
 		id: 1,
