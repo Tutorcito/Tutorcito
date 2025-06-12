@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import {
   Carousel,
@@ -19,10 +21,10 @@ interface Class {
 interface ClassCardCarouselProps {
   classes: Class[];
   title?: string;
-  onSelectSubject?: (subject: string) => void;
+  onSubjectSelect?: (subject: string) => void;
 }
 
-const ClassCardCarousel = ({ classes, title = "Materias Disponibles", onSelectSubject }: ClassCardCarouselProps) => {
+const ClassCardCarousel = ({ classes, title = "Materias Disponibles", onSubjectSelect }: ClassCardCarouselProps) => {
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-10">
       {title && (
@@ -30,6 +32,7 @@ const ClassCardCarousel = ({ classes, title = "Materias Disponibles", onSelectSu
           {title}
         </h2>
       )}
+
       <Carousel opts={{ align: "start", loop: true }} className="w-full">
         <CarouselContent className="-ml-2 md:-ml-4">
           {classes.map((classItem) => (
@@ -42,7 +45,7 @@ const ClassCardCarousel = ({ classes, title = "Materias Disponibles", onSelectSu
                 students={classItem.students}
                 tutors={classItem.tutors}
                 classImage={classItem.classImage}
-                onClick={onSelectSubject}
+                onClick={onSubjectSelect}
               />
             </CarouselItem>
           ))}
