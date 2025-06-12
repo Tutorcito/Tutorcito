@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -26,18 +26,18 @@ export type Profile = {
 
 export async function getUserProfile(userId: string) {
     const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", userId)
-    .single();
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
 
     if (error) {
         console.error("Error fetching user profile: ", error);
         return null;
-    };
+    }
 
     return data as Profile;
-};
+}
 
 export const auth = {
     signInWithGoogle: async () => {
@@ -54,6 +54,9 @@ export const auth = {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
+            options: {
+                emailRedirectTo: `${window.location.origin}/auth/callback`,
+            },
         });
         return { data, error };
     },
@@ -83,5 +86,32 @@ export const auth = {
 
     onAuthStateChange: (callback: any) => {
         return supabase.auth.onAuthStateChange(callback);
+    },
+
+    // Password recovery functions
+    resetPasswordForEmail: async (email: string, options?: { redirectTo?: string }) => {
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: options?.redirectTo || `${window.location.origin}/auth/update-password`,
+        });
+        return { data, error };
+    },
+
+    updatePassword: async (newPassword: string) => {
+        const { data, error } = await supabase.auth.updateUser({
+            password: newPassword
+        });
+        return { data, error };
+    },
+
+    // Email confirmation resend
+    resendConfirmation: async (email: string) => {
+        const { data, error } = await supabase.auth.resend({
+            type: 'signup',
+            email: email,
+            options: {
+                emailRedirectTo: `${window.location.origin}/auth/callback`,
+            }
+        });
+        return { data, error };
     }
 };

@@ -12,26 +12,95 @@ export default function AuthCallback() {
 			const { data, error } = await auth.getSession();
 
 			if (error) {
+				console.error("Session error:", error);
 				throw error;
 			}
 
 			if (data?.session) {
+				const user = data.session.user;
+				console.log("User confirmed:", user.id);
+
+				// Check if profile exists
 				const { data: profile, error: profileError } = await supabase
 					.from("profiles")
 					.select("*")
-					.eq("id", data.session.user.id)
-					.single();
+					.eq("id", user.id)
+					.maybeSingle();
 
-				if (profileError && profileError.code === "PGRST116") {
+				if (profileError && profileError.code !== "PGRST116") {
+					console.error("Profile fetch error:", profileError);
+					throw profileError;
+				}
+
+				if (!profile) {
+					// Profile doesn't exist, create it
+					console.log("Creating profile for confirmed user...");
+
+					// Try to get stored name from localStorage (from registration)
+					const pendingUserName = localStorage.getItem("pendingUserName");
+					const pendingUserId = localStorage.getItem("pendingUserId");
+
+					let fullName =
+						user.user_metadata?.full_name ||
+						user.user_metadata?.name ||
+						pendingUserName ||
+						"Usuario";
+
+					// Verify this is the same user
+					if (pendingUserId && pendingUserId !== user.id) {
+						console.warn("User ID mismatch, using default name");
+						fullName = "Usuario";
+					}
+
+					const { error: insertError } = await supabase
+						.from("profiles")
+						.insert({
+							id: user.id,
+							full_name: fullName,
+							created_at: new Date().toISOString(),
+						});
+
+					if (insertError) {
+						console.error("Profile creation error:", insertError);
+						throw insertError;
+					}
+
+					console.log("Profile created successfully");
+
+					// Clean up localStorage
+					localStorage.removeItem("pendingUserName");
+					localStorage.removeItem("pendingUserId");
+
+					// Redirect to onboarding
 					router.push("/auth/onboarding/step1");
 				} else {
-					router.push("/");
+					console.log("Profile exists, checking completeness...");
+
+					// Profile exists, check if onboarding is complete
+					if (!profile.role) {
+						router.push("/auth/onboarding/step1");
+					} else if (
+						!profile.full_name ||
+						!profile.degree ||
+						!profile.year_in_degree
+					) {
+						router.push("/auth/onboarding/step2");
+					} else {
+						// Profile is complete
+						router.push("/");
+					}
 				}
 			} else {
+				console.log("No session found, redirecting to login");
 				router.push("/auth/login");
 			}
 		} catch (error) {
 			console.error("Error during auth callback: ", error);
+
+			// Clean up localStorage on error
+			localStorage.removeItem("pendingUserName");
+			localStorage.removeItem("pendingUserId");
+
 			router.push("/auth/login?error=callback");
 		}
 	};
@@ -52,18 +121,20 @@ export default function AuthCallback() {
 				<div className="space-y-4 sm:space-y-6">
 					<div className="space-y-2 sm:space-y-3">
 						<h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
-							Procesando tu solicitud
-							<span className="inline-block ml-2 text-2xl sm:text-3xl md:text-4xl lg:text-5xl">⏳</span>
+							Procesando tu cuenta
+							<span className="inline-block ml-2 text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
+								⏳
+							</span>
 						</h1>
-						
+
 						<div className="w-16 sm:w-20 md:w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
 					</div>
 
 					<div className="space-y-3 sm:space-y-4">
 						<p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed px-2 sm:px-4">
-							Por favor espera mientras creamos tu cuenta y configuramos tu perfil.
+							Estamos confirmando tu email y configurando tu perfil.
 						</p>
-						
+
 						<p className="text-xs sm:text-sm text-gray-500 leading-relaxed px-2 sm:px-4">
 							Este proceso puede tomar unos segundos. No cierres esta ventana.
 						</p>
@@ -75,8 +146,14 @@ export default function AuthCallback() {
 					<div className="flex items-center justify-center space-x-2">
 						<div className="flex space-x-1">
 							<div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
-							<div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-							<div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+							<div
+								className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"
+								style={{ animationDelay: "0.2s" }}
+							></div>
+							<div
+								className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"
+								style={{ animationDelay: "0.4s" }}
+							></div>
 						</div>
 					</div>
 				</div>
@@ -84,7 +161,8 @@ export default function AuthCallback() {
 				{/* Footer Message */}
 				<div className="pt-6 sm:pt-8 border-t border-gray-200">
 					<p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
-						Si este proceso toma más de lo esperado, serás redirigido automáticamente.
+						Si este proceso toma más de lo esperado, serás redirigido
+						automáticamente.
 					</p>
 				</div>
 			</div>
