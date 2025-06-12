@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import {
   Carousel,
@@ -19,19 +21,18 @@ interface Class {
 interface ClassCardCarouselProps {
   classes: Class[];
   title?: string;
+  onSubjectSelect?: (subject: string) => void;
 }
 
-const ClassCardCarousel = ({ classes, title = "Materias Disponibles" }: ClassCardCarouselProps) => {
+const ClassCardCarousel = ({ classes, title = "Materias Disponibles", onSubjectSelect }: ClassCardCarouselProps) => {
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-10">
-      {/* Título del carrusel */}
       {title && (
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           {title}
         </h2>
       )}
-      
-      {/* Carrusel */}
+
       <Carousel
         opts={{
           align: "start",
@@ -50,12 +51,12 @@ const ClassCardCarousel = ({ classes, title = "Materias Disponibles" }: ClassCar
                 students={classItem.students}
                 tutors={classItem.tutors}
                 classImage={classItem.classImage}
+                onClick={onSubjectSelect}
               />
             </CarouselItem>
           ))}
         </CarouselContent>
-        
-        {/* Controles de navegación */}
+
         <CarouselPrevious className="hidden sm:flex" />
         <CarouselNext className="hidden sm:flex" />
       </Carousel>
