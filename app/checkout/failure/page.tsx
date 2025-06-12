@@ -43,7 +43,7 @@ export default function PaymentFailurePage() {
 				<div className="space-y-3">
 					<Button
 						onClick={() => router.back()}
-						className="w-full bg-blue-600 hover:bg-blue-700"
+						className="w-full bg-blue-600 hover:bg-blue-700 text-white"
 					>
 						<RefreshCw className="mr-2 h-4 w-4" />
 						Intentar Nuevamente

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 import { CheckCircle, Calendar, Phone, Home } from "lucide-react";
 import Image from "next/image";
+import { useToast } from "@/hooks/useToast";
 
 interface TutorData {
 	id: string;
@@ -19,6 +20,7 @@ interface TutorData {
 export default function PaymentSuccessPage() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
+	const { success } = useToast();
 
 	// MercadoPago sends these parameters
 	const paymentId = searchParams.get("payment_id");
@@ -122,7 +124,7 @@ export default function PaymentSuccessPage() {
 	const copyPhoneNumber = () => {
 		if (tutor?.phone_number) {
 			navigator.clipboard.writeText(tutor.phone_number);
-			alert("Número de teléfono copiado al portapapeles");
+			success("Número de teléfono copiado al portapapeles");
 		}
 	};
 
@@ -223,7 +225,7 @@ export default function PaymentSuccessPage() {
 								</p>
 								<Button
 									onClick={openCalendly}
-									className="w-full bg-blue-600 hover:bg-blue-700"
+									className="w-full bg-blue-500 hover:bg-blue-600 text-white"
 									disabled={!tutor?.calendly_link}
 								>
 									<Calendar className="mr-2 h-4 w-4" />

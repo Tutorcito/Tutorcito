@@ -211,47 +211,47 @@ export default function CheckoutPage() {
 		}
 	};
 
-    // const handleTestPayment = async () => {
-	// 		if (process.env.NODE_ENV !== "development") return;
+    const handleTestPayment = async () => {
+			if (process.env.NODE_ENV !== "development") return;
 
-	// 		if (!selectedDuration || !selectedPrice || !user || !tutor) return;
+			if (!selectedDuration || !selectedPrice || !user || !tutor) return;
 
-	// 		setProcessingPayment(true);
+			setProcessingPayment(true);
 
-	// 		try {
-	// 			const externalReference = `class-${tutorId}-${user.id}-${Date.now()}`;
+			try {
+				const externalReference = `class-${tutorId}-${user.id}-${Date.now()}`;
 
-	// 			// Store payment record in database as "approved"
-	// 			const { error: insertError } = await supabase
-	// 				.from("payment_transactions")
-	// 				.insert({
-	// 					student_id: user.id,
-	// 					tutor_id: tutorId,
-	// 					external_reference: externalReference,
-	// 					payment_type: "class",
-	// 					amount: selectedPrice,
-	// 					status: "approved",
-	// 					class_duration_minutes: selectedDuration,
-	// 					description: `TEST: Tutoría de ${selectedDuration} minutos con ${tutor.full_name}`,
-	// 					mercadopago_payment_id: `test-${Date.now()}`,
-	// 					paid_at: new Date().toISOString(),
-	// 				});
+				// Store payment record in database as "approved"
+				const { error: insertError } = await supabase
+					.from("payment_transactions")
+					.insert({
+						student_id: user.id,
+						tutor_id: tutorId,
+						external_reference: externalReference,
+						payment_type: "class",
+						amount: selectedPrice,
+						status: "approved",
+						class_duration_minutes: selectedDuration,
+						description: `TEST: Tutoría de ${selectedDuration} minutos con ${tutor.full_name}`,
+						mercadopago_payment_id: `test-${Date.now()}`,
+						paid_at: new Date().toISOString(),
+					});
 
-	// 			if (insertError) {
-	// 				throw insertError;
-	// 			}
+				if (insertError) {
+					throw insertError;
+				}
 
-	// 			// Redirect to success page with test parameters
-	// 			router.push(
-	// 				`/checkout/success?payment_id=test-${Date.now()}&status=approved&external_reference=${externalReference}`
-	// 			);
-	// 		} catch (error: any) {
-	// 			console.error("Test payment error:", error);
-	// 			alert(`Error en pago de prueba: ${error.message}`);
-	// 		} finally {
-	// 			setProcessingPayment(false);
-	// 		}
-	// 	}; 
+				// Redirect to success page with test parameters
+				router.push(
+					`/checkout/success?payment_id=test-${Date.now()}&status=approved&external_reference=${externalReference}`
+				);
+			} catch (error: any) {
+				console.error("Test payment error:", error);
+				alert(`Error en pago de prueba: ${error.message}`);
+			} finally {
+				setProcessingPayment(false);
+			}
+		}; 
 
 	if (loading) {
 		return (
@@ -415,7 +415,7 @@ export default function CheckoutPage() {
 										)}
 									</Button>
 
-                                    {/* <div className="mt-4">
+                                    <div className="mt-4">
                                     {process.env.NODE_ENV === 'development' && (
                                         <Button
                                             onClick={handleTestPayment}
@@ -426,7 +426,7 @@ export default function CheckoutPage() {
                                             🧪 Test Payment (Dev Only)
                                         </Button>
                                     )}
-                                    </div> */}
+                                    </div>
 								</div>
 
 								<div className="text-center">
