@@ -208,14 +208,14 @@ export default function Home() {
 						)}
 					</div>
 
-					<FilterDialog
+					{/* <FilterDialog
 						subjects={subjects}
 						setSubjects={setSubjects}
 						careers={carrers}
 						setCareers={setCarrers}
 						years={years}
 						setYears={setYears}
-					/>
+					/> */}
 				</div>
 			</div>
 			{/* <TutorCarousel tutors={filteredTutors} /> */}

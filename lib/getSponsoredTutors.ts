@@ -13,10 +13,16 @@ export const getSponsoredTutors = async () => {
     `)
     .eq("sponsored", true);
 
+    console.log("Raw data from Supabase:", data);
+    console.log("Error if any:", error);
+
     if (error || !data) {
 		throw new Error("Failed to fetch tutors: " + error?.message);
 	}
-    console.log("Full sponsored tutor data:", JSON.stringify(data, null, 2));
+
+    data.forEach(tutor => {
+        console.log(`${tutor.full_name} subjects:`, tutor.tutor_subjects);
+    });
 
     return data.map((tutor) => ({
         id: tutor.id,
