@@ -66,7 +66,7 @@ const ProfileCardContainer: React.FC = () => {
 					.from("tutor_files")
 					.select("*")
 					.eq("tutor_id", user.id)
-					.order("created_at", { ascending: false });
+					// .order("created_at", { ascending: false });
 
 				if (filesError) {
 					console.error("Error fetching tutor files:", filesError);

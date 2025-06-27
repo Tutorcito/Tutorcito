@@ -78,7 +78,6 @@ const ProfileActions = () => {
 				.from("profiles")
 				.update({
 					sponsored: false,
-					updated_at: new Date().toISOString(),
 				})
 				.eq("id", user.id);
 
