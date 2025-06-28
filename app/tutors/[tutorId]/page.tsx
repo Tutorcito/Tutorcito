@@ -13,39 +13,38 @@ export default function TutorPage() {
   const tutorId = typeof params?.tutorId === "string" ? params.tutorId : "";
   const { success, error } = useToast();
   const router = useRouter();
-  
-  if (!tutorId) {
-    return <div className="text-center py-10">Esperando ID del tutor...</div>;
-  }
-
   const [comments, setComments] = useState<Database["public"]["Tables"]["tutor_comments"]["Row"][]>([]);
   const [profilesMap, setProfilesMap] = useState<Record<string, { full_name: string; profile_picture: string | null }>>({});
   const [tutorProfile, setTutorProfile] = useState<Database["public"]["Tables"]["profiles"]["Row"] | null>(null);
   const [loading, setLoading] = useState(false);
+
+  if (!tutorId) {
+    return <div className="text-center py-10">Esperando ID del tutor...</div>;
+  }
 	// Add this helper function for real-time moderation feedback
-	const checkContentInRealTime = async (text: string) => {
-		if (text.length < 10) return; // Don't check very short text
+	// const checkContentInRealTime = async (text: string) => {
+	// 	if (text.length < 10) return; // Don't check very short text
 		
-		try {
-			const response = await fetch('/api/moderate', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ text }),
-			});
+	// 	try {
+	// 		const response = await fetch('/api/moderate', {
+	// 			method: 'POST',
+	// 			headers: {
+	// 				'Content-Type': 'application/json',
+	// 			},
+	// 			body: JSON.stringify({ text }),
+	// 		});
 			
-			if (response.ok) {
-				const { result } = await response.json();
-				if (result.isOffensive && result.confidence > 0.7) {
-					// Could show a warning to the user
-					console.warn('Potentially offensive content detected');
-				}
-			}
-		} catch (error) {
-			console.error('Real-time moderation error:', error);
-		}
-	};
+	// 		if (response.ok) {
+	// 			const { result } = await response.json();
+	// 			if (result.isOffensive && result.confidence > 0.7) {
+	// 				// Could show a warning to the user
+	// 				console.warn('Potentially offensive content detected');
+	// 			}
+	// 		}
+	// 	} catch (error) {
+	// 		console.error('Real-time moderation error:', error);
+	// 	}
+	// };
 
   useEffect(() => {
     const fetchTutor = async () => {
