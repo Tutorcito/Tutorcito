@@ -133,7 +133,7 @@ export default function CheckoutPage() {
 				excluded_payment_methods: [],
 				installments: 12,
 			},
-			notification_url: `${window.location.origin}/api/webhooks/mercadopago`,
+			notification_url: `https://tutorcito.netlify.app/api/webhooks/mercadopago`,
 			statement_descriptor: "TUTORCITO",
 			metadata: {
 				student_id: user.id,
