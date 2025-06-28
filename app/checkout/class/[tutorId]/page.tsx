@@ -120,9 +120,9 @@ export default function CheckoutPage() {
 				},
 			],
 			back_urls: {
-				success: `${window.location.origin}/checkout/success`,
-				failure: `${window.location.origin}/checkout/failure`,
-				pending: `${window.location.origin}/checkout/pending`,
+				success: `https://tutorcito.netlify.app/checkout/success`,
+                failure: `https://tutorcito.netlify.app/checkout/failure`,
+                pending: `https://tutorcito.netlify.app/checkout/pending`,
 			},
 			external_reference: externalReference,
 			payer: {

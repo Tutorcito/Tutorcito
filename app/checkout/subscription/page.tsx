@@ -56,9 +56,9 @@ export default function SubscriptionCheckoutPage() {
 				},
 			],
 			back_urls: {
-				success: `${window.location.origin}/checkout/subscription/success`,
-				failure: `${window.location.origin}/checkout/subscription/failure`,
-				pending: `${window.location.origin}/checkout/subscription/pending`,
+				success: `https://tutorcito.netlify.app/checkout/subscription/success`, // ✅ Updated
+				failure: `https://tutorcito.netlify.app/checkout/subscription/failure`, // ✅ Updated
+				pending: `https://tutorcito.netlify.app/checkout/subscription/pending`, // ✅ Updated
 			},
 			external_reference: externalReference,
 			payer: {

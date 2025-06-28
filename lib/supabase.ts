@@ -44,7 +44,7 @@ export const auth = {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}/auth/callback`,
+                redirectTo: `https://tutorcito.netlify.app/auth/callback`,
             },
         });
         return { data, error };
@@ -55,7 +55,7 @@ export const auth = {
             email,
             password,
             options: {
-                emailRedirectTo: `${window.location.origin}/auth/callback`,
+                emailRedirectTo: `https://tutorcito.netlify.app/auth/callback`,
             },
         });
         return { data, error };
@@ -91,7 +91,7 @@ export const auth = {
     // Password recovery functions
     resetPasswordForEmail: async (email: string, options?: { redirectTo?: string }) => {
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: options?.redirectTo || `${window.location.origin}/auth/update-password`,
+            redirectTo: options?.redirectTo || `https://tutorcito.netlify.app/auth/update-password`,
         });
         return { data, error };
     },
@@ -109,7 +109,7 @@ export const auth = {
             type: 'signup',
             email: email,
             options: {
-                emailRedirectTo: `${window.location.origin}/auth/callback`,
+                emailRedirectTo: `https://tutorcito.netlify.app/auth/callback`,
             }
         });
         return { data, error };

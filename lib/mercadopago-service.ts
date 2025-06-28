@@ -111,7 +111,7 @@ export class MercadoPagoService {
 						.toISOString()
 						.split("T")[0], // Tomorrow
 				},
-				back_url: `${process.env.NEXT_PUBLIC_BASE_URL}/subscription/success`,
+				back_url: `https://tutorcito.netlify.app/subscription/success`,
 				notification_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhooks/mercadopago`,
 			};
 
