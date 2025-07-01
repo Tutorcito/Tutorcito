@@ -21,6 +21,7 @@ export type Database = {
 					role: string;
 					sponsored: boolean | null;
 					year_in_degree: number | null;
+					mercadopago_user_id: string | null;
 				};
 				Insert: {
 					calendly_link?: string | null;
@@ -33,6 +34,7 @@ export type Database = {
 					role: string;
 					sponsored?: boolean | null;
 					year_in_degree?: number | null;
+					mercadopago_user_id?: string | null;
 				};
 				Update: {
 					calendly_link?: string | null;
@@ -45,6 +47,7 @@ export type Database = {
 					role?: string;
 					sponsored?: boolean | null;
 					year_in_degree?: number | null;
+					mercadopago_user_id?: string | null;
 				};
 				Relationships: [];
 			};

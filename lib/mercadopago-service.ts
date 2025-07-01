@@ -34,10 +34,31 @@ export class MercadoPagoService {
 				request.studentId
 			}-${Date.now()}`;
 
+			// First, get the tutor's MercadoPago user ID
+			const { data: tutorProfile, error: tutorError } = await supabase
+				.from("profiles")
+				.select("mercadopago_user_id, full_name")
+				.eq("id", request.tutorId)
+				.single();
+
+			if (tutorError || !tutorProfile) {
+				throw new Error("Tutor not found");
+			}
+
+			// Check if tutor has MercadoPago integration
+			if (!tutorProfile.mercadopago_user_id) {
+				throw new Error("Tutor doesn't have MercadoPago integration set up");
+			}
+
+			// Calculate split amounts
+			const platformFeePercentage = 4.5;
+			const platformFee = Math.round(request.amount * (platformFeePercentage / 100));
+			const tutorAmount = request.amount - platformFee;
+
 			const paymentData = {
 				transaction_amount: request.amount,
 				token: request.cardToken,
-				description: `Tutoría de ${request.durationMinutes} minutos`,
+				description: `Tutoría de ${request.durationMinutes} minutos con ${tutorProfile.full_name}`,
 				installments: request.installments || 1,
 				payment_method_id: "visa", // This will be determined by the card
 				payer: {
@@ -45,15 +66,34 @@ export class MercadoPagoService {
 				},
 				external_reference: externalReference,
 				notification_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhooks/mercadopago`,
+				// HERE'S THE KEY PART: Add application fee for split payment
+				application_fee: platformFee,
+				// Specify where the money should go (to the tutor)
+				marketplace: "MARKETPLACE",
+				// Additional metadata for tracking
 				metadata: {
 					student_id: request.studentId,
 					tutor_id: request.tutorId,
 					duration_minutes: request.durationMinutes,
 					payment_type: "class",
+					platform_fee: platformFee,
+					tutor_amount: tutorAmount,
 				},
 			};
 
-			const payment = await this.payment.create({ body: paymentData });
+			const paymentPayload = {
+				...paymentData,
+				collector_id: tutorProfile.mercadopago_user_id,
+			};
+
+			console.log("Creating split payment:", {
+				total: request.amount,
+				platformFee,
+				tutorAmount,
+				tutorMercadoPagoId: tutorProfile.mercadopago_user_id
+			});
+
+			const payment = await this.payment.create({ body: paymentPayload });
 
 			// Store payment in database
 			const { data: paymentRecord, error } = await supabase
@@ -70,6 +110,9 @@ export class MercadoPagoService {
 					description: paymentData.description,
 					metadata: {
 						mercadopago_response: payment,
+						platform_fee: platformFee,
+						tutor_amount: tutorAmount,
+						tutor_mercadopago_id: tutorProfile.mercadopago_user_id,
 					},
 				})
 				.select()
@@ -86,6 +129,11 @@ export class MercadoPagoService {
 				status: payment.status,
 				payment_record_id: paymentRecord.id,
 				external_reference: externalReference,
+				split_info: {
+					total_amount: request.amount,
+					platform_fee: platformFee,
+					tutor_amount: tutorAmount,
+				},
 			};
 		} catch (error) {
 			console.error("Class payment creation error:", error);
