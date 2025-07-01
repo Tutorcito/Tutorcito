@@ -30,22 +30,18 @@ export async function POST(request: NextRequest) {
 			}
 		}
 
-		// Validate back_urls
-		if (!body.back_urls || !body.back_urls.success) {
-			return NextResponse.json(
-				{ error: "Back URLs are required" },
-				{ status: 400 }
-			);
-		}
-
 		const preference = new Preference(client);
+
+		const baseUrl = process.env.NODE_ENV === 'production' ? 'https://tutorcito.netlify.app' : 'http://localhost:3000';
 
 		// Ensure all back URLs are properly defined
 		const backUrls = {
-			success: body.back_urls.success,
-			failure: body.back_urls.failure || body.back_urls.success,
-			pending: body.back_urls.pending || body.back_urls.success,
+			success: `${baseUrl}/checkout/success`,
+			failure: `${baseUrl}/checkout/failure`, 
+			pending: `${baseUrl}/checkout/pending`,
 		};
+
+		console.log("Back URLs:", backUrls);
 
 		const preferenceData = {
 			items: body.items.map((item: any) => ({
@@ -57,10 +53,9 @@ export async function POST(request: NextRequest) {
 				currency_id: item.currency_id || "ARS",
 			})),
 			back_urls: backUrls,
-			// Remove auto_return for now to avoid the error
-			// auto_return: "approved",
+			auto_return: "approved",
 			external_reference: body.external_reference,
-			notification_url: body.notification_url,
+			notification_url: `${baseUrl}/api/webhooks/mercadopago`,
 			statement_descriptor: body.statement_descriptor || "TUTORCITO",
 			payment_methods: {
 				excluded_payment_types: [],
@@ -70,7 +65,13 @@ export async function POST(request: NextRequest) {
 			payer: {
 				email: body.payer?.email || "",
 			},
-			metadata: body.metadata || {},
+			metadata: {
+				...body.metadata,
+				baseUrl: baseUrl,
+			},
+			expires: true,
+			expiration_date_from: new Date().toISOString(),
+			expiration_date_to: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours
 		};
 
 		console.log(
@@ -86,6 +87,7 @@ export async function POST(request: NextRequest) {
 			id: result.id,
 			init_point: result.init_point,
 			sandbox_init_point: result.sandbox_init_point,
+			backUrls: backUrls,
 		});
 	} catch (error: any) {
 		console.error("Preference creation error:", error);
