@@ -13,7 +13,7 @@ export default function SubscriptionCheckoutPage() {
 	const [user, setUser] = useState<any>(null);
 	const [loading, setLoading] = useState(true);
 	const [processingPayment, setProcessingPayment] = useState(false);
-    const { error } = useToast();
+	const { error } = useToast();
 
 	useEffect(() => {
 		fetchCurrentUser();
@@ -50,22 +50,29 @@ export default function SubscriptionCheckoutPage() {
 		const preference = {
 			items: [
 				{
+					id: "premium-subscription",
 					title: "Plan Premium Tutorcito",
+					description: "Suscripción Premium - Mayor visibilidad",
 					quantity: 1,
-					unit_price: 5000,
+					unit_price: 5,
+					currency_id: "ARS",
 				},
 			],
 			back_urls: {
-				success: `https://tutorcito.netlify.app/checkout/subscription/success`, // ✅ Updated
-				failure: `https://tutorcito.netlify.app/checkout/subscription/failure`, // ✅ Updated
-				pending: `https://tutorcito.netlify.app/checkout/subscription/pending`, // ✅ Updated
+				success: `https://tutorcito.netlify.app/checkout/subscription/success`,
+				failure: `https://tutorcito.netlify.app/checkout/subscription/failure`,
+				pending: `https://tutorcito.netlify.app/checkout/subscription/pending`,
 			},
 			external_reference: externalReference,
 			payer: {
 				email: user.email,
 			},
-			notification_url: `${window.location.origin}/api/webhooks/mercadopago`,
-			payment_type: "subscription",
+			notification_url: `https://tutorcito.netlify.app/api/webhooks/mercadopago`,
+			statement_descriptor: "TUTORCITO PREMIUM",
+			metadata: {
+				user_id: user.id,
+				payment_type: "subscription",
+			},
 		};
 
 		try {
@@ -89,17 +96,22 @@ export default function SubscriptionCheckoutPage() {
 		}
 	};
 
-	const handleTestPayment = async () => {
-		if (process.env.NODE_ENV !== "development") return;
-
+	const handleSubscriptionPayment = async () => {
 		if (!user) return;
 
 		setProcessingPayment(true);
 
 		try {
+			// Use the same preference creation logic as classes
+			const preferenceData = await createSubscriptionPreference();
+
+			if (!preferenceData || !preferenceData.init_point) {
+				throw new Error("No se pudo crear la preferencia de pago");
+			}
+
+			// Store the payment record
 			const externalReference = `subscription-${user.id}-${Date.now()}`;
 
-			// Store payment record in database as "approved"
 			const { error: insertError } = await supabase
 				.from("payment_transactions")
 				.insert({
@@ -107,13 +119,11 @@ export default function SubscriptionCheckoutPage() {
 					external_reference: externalReference,
 					payment_type: "subscription",
 					amount: 5000,
-					status: "approved",
-					description: "TEST: Plan Premium Tutorcito - Suscripción Mensual",
-					mercadopago_payment_id: `test-${Date.now()}`,
-					paid_at: new Date().toISOString(),
+					status: "pending",
+					description: "Plan Premium Tutorcito - Suscripción",
 					metadata: {
+						preference_id: preferenceData.id,
 						subscription_type: "premium",
-						test_payment: true,
 					},
 				});
 
@@ -121,25 +131,11 @@ export default function SubscriptionCheckoutPage() {
 				throw insertError;
 			}
 
-			// Update user's sponsored status to true
-			const { error: updateError } = await supabase
-				.from("profiles")
-				.update({
-					sponsored: true,
-				})
-				.eq("id", user.id);
-
-			if (updateError) {
-				throw updateError;
-			}
-
-			// Redirect to success page with test parameters
-			router.push(
-				`/checkout/subscription/success?payment_id=test-${Date.now()}&status=approved&external_reference=${externalReference}`
-			);
+			// Redirect to MercadoPago instead of success page
+			window.location.href = preferenceData.init_point;
 		} catch (error: any) {
-			console.error("Test subscription payment error:", error);
-			error(`Error en pago de prueba: ${error.message}`);
+			console.error("Subscription payment error:", error);
+			alert(`Error al procesar el pago: ${error.message}`);
 		} finally {
 			setProcessingPayment(false);
 		}
@@ -255,7 +251,7 @@ export default function SubscriptionCheckoutPage() {
 
 							<div className="pt-4 border-t">
 								<Button
-									onClick={handleTestPayment}
+									onClick={handleSubscriptionPayment}
 									disabled={processingPayment}
 									className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg"
 								>
