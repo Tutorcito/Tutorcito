@@ -43,7 +43,6 @@ export default function SubscriptionDialog({
 				.from("profiles")
 				.update({
 					sponsored: true,
-					updated_at: new Date().toISOString(),
 				})
 				.eq("id", user.id);
 
