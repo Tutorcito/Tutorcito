@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import SubscriptionDialog from './SubscriptionDialog';
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import {
@@ -30,6 +31,7 @@ const CardsCta = () => {
 	const [user, setUser] = useState<any>(null);
 	const [userProfile, setUserProfile] = useState<any>(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const [showSubscriptionDialog, setShowSubscriptionDialog] = useState(false);
 	const { info } = useToast();
 
 	// Obtener usuario y perfil
@@ -101,7 +103,7 @@ const CardsCta = () => {
 			userProfile &&
 			(userProfile.role === "tutor" || userProfile.role === "ambos")
 		) {
-			router.push("/checkout/subscription");
+			setShowSubscriptionDialog(true);
 		} else {
 			info(
 				"Primero necesitas ser tutor para acceder al plan premium. ¡Únete como tutor!"
@@ -222,6 +224,11 @@ const CardsCta = () => {
 					</div>
 				</div>
 			</div>
+			<SubscriptionDialog
+				isOpen={showSubscriptionDialog}
+				onClose={() => setShowSubscriptionDialog(false)}
+				user={user}
+			/>
 		</div>
 	);
 };
