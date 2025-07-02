@@ -119,7 +119,7 @@ export default function SubscriptionCheckoutPage() {
 					external_reference: externalReference,
 					payment_type: "subscription",
 					amount: 5,
-					status: "success",
+					status: "pending",
 					description: "Plan Premium Tutorcito - Suscripción",
 					metadata: {
 						preference_id: preferenceData.id,
