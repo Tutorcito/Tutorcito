@@ -89,21 +89,21 @@ export default function SubscriptionDialog({
 				throw updateError;
 			}
 
-			// Create a transaction record for tracking
-			const externalReference = `subscription-${user.id}-${Date.now()}`;
+			// // Create a transaction record for tracking
+			// const externalReference = `subscription-${user.id}-${Date.now()}`;
 
-			await supabase.from("payment_transactions").insert({
-				student_id: user.id,
-				external_reference: externalReference,
-				payment_type: "subscription",
-				amount: 5000,
-				status: "pending",
-				description: "Plan Premium Tutorcito - Suscripción MP",
-				metadata: {
-					mercadopago_plan_id: "2c93808497c19ac40197cb1b08c50451",
-					direct_mp_subscription: true,
-				},
-			});
+			// await supabase.from("payment_transactions").insert({
+			// 	student_id: user.id,
+			// 	external_reference: externalReference,
+			// 	payment_type: "subscription",
+			// 	amount: 5000,
+			// 	status: "pending",
+			// 	description: "Plan Premium Tutorcito - Suscripción MP",
+			// 	metadata: {
+			// 		mercadopago_plan_id: "2c93808497c19ac40197cb1b08c50451",
+			// 		direct_mp_subscription: true,
+			// 	},
+			// });
 
 			success("¡Estado premium activado! Serás redirigido a MercadoPago...");
 
